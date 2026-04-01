@@ -147,12 +147,13 @@ label {
     background-color: var(--input-bg-dark);
     color: var(--ink);
     border: 1px solid var(--border-color);
-    padding: 10px 15px;
+    padding: 8px 15px;
     font-family: inherit;
-    font-size: 0.9rem;
+    cursor: pointer;
     border-radius: 3px;
     transition: all 0.2s;
     display: inline-block;
+    text-align: center;
 }
 
 .btn-teal:hover {
@@ -160,7 +161,6 @@ label {
     color: var(--magic-gold);
 }
 
-/* Container do Upload */
 .photo-upload-container {
     display: flex;
     align-items: center;
@@ -172,11 +172,12 @@ label {
     height: 100px;
     border: 2px dashed var(--border-color);
     object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: var(--input-bg-dark);
-    display: block;
 }
 
-/* Estilos do Arquivo */
 .archive-grid {
     display: grid;
     grid-template-columns: 1fr 2fr;
