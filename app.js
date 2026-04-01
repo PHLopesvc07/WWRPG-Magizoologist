@@ -6,6 +6,9 @@
 // Variável global para armazenar a fotografia convertida em texto (Base64)
 let currentImageBase64 = "";
 
+// Variável de estado global para guardar os dados brutos e não fazer fetch à toa
+let globalCreatureArchive = [];
+
 // 1. Inicialização do Sistema
 document.addEventListener('DOMContentLoaded', () => {
     // Configura os botões das abas de navegação
@@ -166,7 +169,7 @@ async function loadArchive() {
             return;
         }
 
-        let archive = [];
+        globalCreatureArchive = [];
 
         // Passo B: Busca os dados de cada criatura listada
         for (let nomeArquivo of arquivos) {
@@ -174,7 +177,7 @@ async function loadArchive() {
                 const res = await fetch(`./dados/${nomeArquivo}${cacheBuster}`);
                 if (res.ok) {
                     const dadosCriatura = await res.json();
-                    archive.push(dadosCriatura);
+                    globalCreatureArchive.push(dadosCriatura);
                 } else {
                     console.warn(`[Aviso do Ministério]: Não foi possível carregar ${nomeArquivo}`);
                 }
@@ -183,35 +186,11 @@ async function loadArchive() {
             }
         }
 
-        // Passo C: Organiza alfabeticamente
-        archive.sort((a, b) => a.nome.localeCompare(b.nome));
-
-        // Passo D: Renderiza na tela
-        listEl.innerHTML = ''; 
+        // Prepara os "Ouvintes" para os filtros e ordenação
+        setupFilterListeners();
         
-        archive.forEach((creature) => {
-            const li = document.createElement('li');
-            li.className = 'creature-item';
-            
-            const span = document.createElement('span');
-            span.className = 'creature-item-title';
-            span.textContent = `${creature.nome} (${creature.classificacao})`;
-            
-            span.onclick = () => showCreatureDetails(creature);
-
-            const exportBtn = document.createElement('button');
-            exportBtn.className = 'btn-teal';
-            exportBtn.style.fontSize = '0.8rem';
-            exportBtn.textContent = 'Extrair Cópia';
-            exportBtn.onclick = (e) => {
-                e.stopPropagation(); 
-                exportJson(creature);
-            };
-
-            li.appendChild(span);
-            li.appendChild(exportBtn);
-            listEl.appendChild(li);
-        });
+        // Renderiza a tela baseando-se nos filtros atuais (inicialmente exibe tudo de A-Z)
+        applyFiltersAndRender();
 
     } catch (erro) {
         console.error("Erro burocrático:", erro);
@@ -224,6 +203,97 @@ async function loadArchive() {
                 3. Você aguardou 1 ou 2 minutos após o commit no GitHub Pages.
             </li>`;
     }
+}
+
+// 7.1 Configura os Eventos de Filtro e Ordenação
+function setupFilterListeners() {
+    document.getElementById('sort-order').addEventListener('change', applyFiltersAndRender);
+    
+    const checkboxes = document.querySelectorAll('.filter-panel input[type="checkbox"]');
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', applyFiltersAndRender);
+    });
+}
+
+// 7.2 Lógica principal: Filtra, Ordena e Desenha na Tela
+function applyFiltersAndRender() {
+    const listEl = document.getElementById('archive-list');
+    listEl.innerHTML = '';
+
+    // 1. Coleta quais filtros estão ativados (marcados)
+    const activeFilters = {
+        tipo: [],
+        classificacao: [],
+        locomocao: [],
+        origem: [],
+        interacao: []
+    };
+
+    document.querySelectorAll('.filter-panel input[type="checkbox"]:checked').forEach(cb => {
+        const category = cb.getAttribute('data-filter');
+        activeFilters[category].push(cb.value);
+    });
+
+    // 2. Filtra as Criaturas
+    let filteredCreatures = globalCreatureArchive.filter(creature => {
+        let isValid = true;
+        
+        // Regra: Se a categoria tem filtros selecionados, a criatura deve pertencer a algum deles
+        for (const category in activeFilters) {
+            if (activeFilters[category].length > 0) {
+                // Algumas chaves no JSON podem vir diferentes ou undefined, normalizamos para a comparação
+                const creatureAttr = String(creature[category]); 
+                if (!activeFilters[category].includes(creatureAttr)) {
+                    isValid = false;
+                    break;
+                }
+            }
+        }
+        return isValid;
+    });
+
+    // 3. Aplica a Ordenação (A-Z ou Z-A)
+    const sortOrder = document.getElementById('sort-order').value;
+    filteredCreatures.sort((a, b) => {
+        const valA = a.nome.toLowerCase();
+        const valB = b.nome.toLowerCase();
+        
+        if (sortOrder === 'AZ') {
+            return valA.localeCompare(valB);
+        } else {
+            return valB.localeCompare(valA); // Z-A invertido
+        }
+    });
+
+    // 4. Renderiza na Tela
+    if (filteredCreatures.length === 0) {
+        listEl.innerHTML = '<li style="color: gray; padding: 10px; text-align:center;">Nenhum espécime encontrado com estas características.</li>';
+        return;
+    }
+
+    filteredCreatures.forEach((creature) => {
+        const li = document.createElement('li');
+        li.className = 'creature-item';
+        
+        const span = document.createElement('span');
+        span.className = 'creature-item-title';
+        span.textContent = `${creature.nome} (${creature.classificacao})`;
+        
+        span.onclick = () => showCreatureDetails(creature);
+
+        const exportBtn = document.createElement('button');
+        exportBtn.className = 'btn-teal';
+        exportBtn.style.fontSize = '0.8rem';
+        exportBtn.textContent = 'Extrair Cópia';
+        exportBtn.onclick = (e) => {
+            e.stopPropagation(); 
+            exportJson(creature);
+        };
+
+        li.appendChild(span);
+        li.appendChild(exportBtn);
+        listEl.appendChild(li);
+    });
 }
 
 // 8. Visualização de Detalhes da Criatura (Painel Direito)

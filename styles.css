@@ -236,3 +236,40 @@ label {
     border-radius: 3px;
     font-size: 0.85rem;
 }
+
+/* ==================================
+   FILTROS E ORDENAÇÃO
+   ================================== */
+.filter-details {
+    margin-bottom: 5px;
+    background-color: var(--input-bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 5px 10px;
+}
+
+.filter-details summary {
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--magic-gold);
+    outline: none;
+    user-select: none;
+}
+
+.filter-details summary:hover {
+    color: var(--ink);
+}
+
+.filter-details label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: normal;
+    margin: 5px 0 5px 15px;
+    cursor: pointer;
+}
+
+.filter-details input[type="checkbox"] {
+    accent-color: var(--magic-gold);
+    margin-right: 5px;
+}

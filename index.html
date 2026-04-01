@@ -160,8 +160,58 @@
         <section id="tab-archive" class="tab-content">
             <div class="bureaucracy-box">
                 <div class="archive-grid">
-                    <div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
                         <h2>Índice Registrado</h2>
+                        
+                        <div class="filter-panel bureaucracy-box" style="padding: 10px; margin: 0; box-shadow: none;">
+                            <h3 style="margin-top:0; font-size: 1rem; color: var(--magic-gold);">Filtros de Pesquisa</h3>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label>Ordenação Alfabética</label>
+                                <select id="sort-order" class="ink-select">
+                                    <option value="AZ" selected>A - Z</option>
+                                    <option value="ZA">Z - A</option>
+                                </select>
+                            </div>
+
+                            <details class="filter-details">
+                                <summary>Tipo de Criatura</summary>
+                                <label><input type="checkbox" value="Simples" data-filter="tipo"> Simples</label>
+                                <label><input type="checkbox" value="Neutro" data-filter="tipo"> Neutro</label>
+                                <label><input type="checkbox" value="Consciente" data-filter="tipo"> Consciente</label>
+                                <label><input type="checkbox" value="Bestial" data-filter="tipo"> Bestial</label>
+                            </details>
+
+                            <details class="filter-details">
+                                <summary>Classificação M.M.</summary>
+                                <label><input type="checkbox" value="X" data-filter="classificacao"> X</label>
+                                <label><input type="checkbox" value="XX" data-filter="classificacao"> XX</label>
+                                <label><input type="checkbox" value="XXX" data-filter="classificacao"> XXX</label>
+                                <label><input type="checkbox" value="XXXX" data-filter="classificacao"> XXXX</label>
+                                <label><input type="checkbox" value="XXXXX" data-filter="classificacao"> XXXXX</label>
+                            </details>
+
+                            <details class="filter-details">
+                                <summary>Locomoção</summary>
+                                <label><input type="checkbox" value="aéreos" data-filter="locomocao"> Aéreos</label>
+                                <label><input type="checkbox" value="terrestres" data-filter="locomocao"> Terrestres</label>
+                                <label><input type="checkbox" value="aquáticos" data-filter="locomocao"> Aquáticos</label>
+                                <label><input type="checkbox" value="aquaéros" data-filter="locomocao"> Aquaéros</label>
+                            </details>
+
+                            <details class="filter-details">
+                                <summary>Origem</summary>
+                                <label><input type="checkbox" value="Natural" data-filter="origem"> Natural</label>
+                                <label><input type="checkbox" value="Artificial" data-filter="origem"> Artificial</label>
+                            </details>
+
+                            <details class="filter-details">
+                                <summary>Interação</summary>
+                                <label><input type="checkbox" value="pacifico" data-filter="interacao"> Pacífico</label>
+                                <label><input type="checkbox" value="agressivo" data-filter="interacao"> Agressivo</label>
+                            </details>
+                        </div>
+
                         <ul class="creature-list" id="archive-list"></ul>
                     </div>
                     
