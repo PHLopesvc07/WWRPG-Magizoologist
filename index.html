@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Oficial de Criaturas Mágicas | Departamento para Regulamentação e Controle</title>
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <script src="app.js" defer></script>
+</head>
+<body>
+
+    <header>
+        <h1>Ministério da Magia</h1>
+        <p>Departamento para Regulamentação e Controle das Criaturas Mágicas</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-target="tab-register">I. Registrar Criatura</button>
+        <button class="tab-btn" data-target="tab-archive">II. Arquivo de Criaturas</button>
+    </div>
+
+    <main>
+        <section id="tab-register" class="tab-content active">
+            <form id="creature-form">
+                
+                <div class="bureaucracy-box">
+                    <h2>Dados de Identificação</h2>
+                    
+                    <div class="form-group full-width" style="margin-bottom: 15px;">
+                        <label>Fotografia da Criatura</label>
+                        <div class="photo-upload-container">
+                            <img id="photo-preview" src="" alt="Sem Foto">
+                            <input type="file" id="creature-photo" class="ink-input" accept="image/*" style="flex-grow: 1;">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nome / Espécie</label>
+                            <input type="text" id="c-name" class="ink-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tamanho Adulto (m)</label>
+                            <input type="number" step="0.01" id="c-size" class="ink-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Peso Adulto (kg)</label>
+                            <input type="number" step="0.1" id="c-weight" class="ink-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Classif. M.M.</label>
+                            <select id="c-class" class="ink-select" required>
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="X">X</option>
+                                <option value="XX">XX</option>
+                                <option value="XXX">XXX</option>
+                                <option value="XXXX">XXXX</option>
+                                <option value="XXXXX">XXXXX</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Licença Necessária</label>
+                            <select id="c-license" class="ink-select">
+                                <option value="selecione" selected>Selecione</option>
+                                <option value="Comum">Comum</option>
+                                <option value="Magizoologista">Magizoologista</option>
+                                <option value="Não liberado">Não liberado</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Origem</label>
+                            <select id="c-origin" class="ink-select">
+                                <option value="Natural" selected>Natural</option>
+                                <option value="Artificial">Artificial</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Locomoção</label>
+                            <select id="c-locomotion" class="ink-select">
+                                <option value="aéreos">Aéreos</option>
+                                <option value="terrestres" selected>Terrestres</option>
+                                <option value="aquáticos">Aquáticos</option>
+                                <option value="aquaéros">Aquaéros</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Interação</label>
+                            <select id="c-interaction" class="ink-select">
+                                <option value="pacifico">Pacífico</option>
+                                <option value="agressivo">Agressivo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tipo da Criatura</label>
+                            <select id="c-type" class="ink-select">
+                                <option value="Simples" selected>Simples</option>
+                                <option value="Neutro">Neutro</option>
+                                <option value="Consciente">Consciente</option>
+                                <option value="Bestial">Bestial</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Descrição Física e Comportamental</label>
+                            <textarea id="c-desc" class="ink-textarea" required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bureaucracy-box">
+                    <h2>Atributos Base</h2>
+                    <div class="form-grid" id="attributes-grid">
+                        <div class="form-group attr-always">
+                            <label>Corpo</label>
+                            <input type="number" id="attr-corpo" class="ink-input" value="0" min="0">
+                        </div>
+                        <div class="form-group attr-always">
+                            <label>Destreza</label>
+                            <input type="number" id="attr-destreza" class="ink-input" value="0" min="0">
+                        </div>
+                        <div class="form-group attr-always">
+                            <label>Vitalidade</label>
+                            <input type="number" id="attr-vitalidade" class="ink-input" value="0" min="0">
+                        </div>
+                        
+                        <div class="form-group attr-dynamic" id="wrap-instinto" style="display: none;">
+                            <label>Instinto</label>
+                            <input type="number" id="attr-instinto" class="ink-input" value="0" min="0">
+                        </div>
+                        <div class="form-group attr-dynamic" id="wrap-carisma" style="display: none;">
+                            <label>Carisma</label>
+                            <input type="number" id="attr-carisma" class="ink-input" value="0" min="0">
+                        </div>
+                        <div class="form-group attr-dynamic" id="wrap-inteligencia" style="display: none;">
+                            <label>Inteligência</label>
+                            <input type="number" id="attr-inteligencia" class="ink-input" value="0" min="0">
+                        </div>
+                        <div class="form-group attr-dynamic" id="wrap-sabedoria" style="display: none;">
+                            <label>Sabedoria</label>
+                            <input type="number" id="attr-sabedoria" class="ink-input" value="0" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: right;">
+                    <button type="submit" class="btn-gold">Carimbar e Salvar Arquivo</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="tab-archive" class="tab-content">
+            <div class="bureaucracy-box">
+                <div class="import-actions">
+                    <label for="import-json" class="btn-teal" style="margin: 0;">Importar Manuscritos (.json)</label>
+                    <input type="file" id="import-json" accept=".json" multiple style="display: none;">
+                    <button id="btn-clear" class="btn-teal" style="border-color: #8B0000; color: #ff6b6b;">Purgar Arquivo Local</button>
+                </div>
+
+                <div class="archive-grid">
+                    <div>
+                        <h2>Índice Registrado</h2>
+                        <ul class="creature-list" id="archive-list">
+                            </ul>
+                    </div>
+                    
+                    <div class="creature-details" id="creature-viewer">
+                        <div style="text-align: center; color: var(--border-color); margin-top: 50px;">
+                            Selecione uma criatura no índice para visualizar o registro completo.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>
