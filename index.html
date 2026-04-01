@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro Oficial de Criaturas Mágicas | Departamento para Regulamentação e Controle</title>
-    
     <link rel="stylesheet" href="styles.css">
-    
     <script src="app.js" defer></script>
 </head>
 <body>
@@ -32,7 +30,12 @@
                         <label>Fotografia da Criatura</label>
                         <div class="photo-upload-container">
                             <img id="photo-preview" src="" alt="Sem Foto">
-                            <input type="file" id="creature-photo" class="ink-input" accept="image/*" style="flex-grow: 1;">
+                            
+                            <input type="file" id="creature-photo" accept="image/*" hidden>
+                            
+                            <label for="creature-photo" class="btn-teal" style="cursor: pointer;">
+                                Selecionar Manuscrito Visual
+                            </label>
                         </div>
                     </div>
 
@@ -161,8 +164,7 @@
                 <div class="archive-grid">
                     <div>
                         <h2>Índice Registrado</h2>
-                        <ul class="creature-list" id="archive-list">
-                            </ul>
+                        <ul class="creature-list" id="archive-list"></ul>
                     </div>
                     
                     <div class="creature-details" id="creature-viewer">

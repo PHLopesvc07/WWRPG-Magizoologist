@@ -1,6 +1,3 @@
-/* =========================================
-   DESIGN SYSTEM & IDENTIDADE VISUAL
-   ========================================= */
 :root {
     --ink: #A3CCAB;
     --parchment: #14140F;
@@ -37,7 +34,6 @@ header h1 {
     font-size: 1.5rem;
 }
 
-/* Navegação em Abas */
 .tabs {
     display: flex;
     justify-content: center;
@@ -62,7 +58,6 @@ header h1 {
     color: var(--magic-gold);
 }
 
-/* Estruturas Principais */
 main {
     width: 100%;
     max-width: 900px;
@@ -93,7 +88,6 @@ main {
     font-size: 1.2rem;
 }
 
-/* Inputs e Formulários */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -136,7 +130,6 @@ label {
     min-height: 80px;
 }
 
-/* Botões */
 .btn-gold {
     background-color: var(--magic-gold);
     color: #000;
@@ -150,18 +143,16 @@ label {
     transition: background-color 0.2s;
 }
 
-.btn-gold:hover {
-    background-color: #d15a00;
-}
-
 .btn-teal {
     background-color: var(--input-bg-dark);
     color: var(--ink);
     border: 1px solid var(--border-color);
-    padding: 8px 15px;
+    padding: 10px 15px;
     font-family: inherit;
-    cursor: pointer;
+    font-size: 0.9rem;
+    border-radius: 3px;
     transition: all 0.2s;
+    display: inline-block;
 }
 
 .btn-teal:hover {
@@ -169,7 +160,7 @@ label {
     color: var(--magic-gold);
 }
 
-/* Foto e Preview */
+/* Container do Upload */
 .photo-upload-container {
     display: flex;
     align-items: center;
@@ -181,16 +172,11 @@ label {
     height: 100px;
     border: 2px dashed var(--border-color);
     object-fit: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    text-align: center;
-    color: var(--border-color);
     background-color: var(--input-bg-dark);
+    display: block;
 }
 
-/* Arquivo (Aba 2) */
+/* Estilos do Arquivo */
 .archive-grid {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -201,8 +187,6 @@ label {
     list-style: none;
     padding: 0;
     margin: 0;
-    max-height: 500px;
-    overflow-y: auto;
 }
 
 .creature-item {
@@ -218,10 +202,6 @@ label {
 
 .creature-item:hover {
     border-left: 3px solid var(--magic-gold);
-}
-
-.creature-item-title {
-    font-weight: bold;
 }
 
 .creature-details {
@@ -254,11 +234,4 @@ label {
     margin: 2px;
     border-radius: 3px;
     font-size: 0.85rem;
-}
-
-.import-actions {
-    margin-bottom: 20px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
 }
