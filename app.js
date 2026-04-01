@@ -1,6 +1,6 @@
 /* =======================================================
    MINISTÉRIO DA MAGIA - DEPARTAMENTO DE CRIATURAS
-   app.js - Lógica de Negócio e Controle de Dados
+   app.js - Lógica de Negócio e Consulta Automática (GitHub)
    ======================================================= */
 
 // Variável global para armazenar a fotografia convertida em texto (Base64)
@@ -16,9 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
             openTab(targetId, e.target);
         });
     });
-
-    // Carrega o arquivo automaticamente ao abrir a página (caso a aba 2 seja a padrão)
-    // Como a Aba 1 é a padrão, o carregamento acontecerá ao clicar na Aba 2.
 });
 
 // 2. Navegação entre as Abas (Formulário x Arquivo)
@@ -31,7 +28,7 @@ function openTab(tabId, clickedBtn) {
     document.getElementById(tabId).classList.add('active');
     clickedBtn.classList.add('active');
 
-    // Se abriu a aba do Arquivo, dispara a busca automática nos dados do servidor
+    // Se abriu a aba do Arquivo, dispara a busca automática nos dados do servidor (GitHub)
     if(tabId === 'tab-archive') {
         loadArchive();
     }
@@ -46,7 +43,7 @@ document.getElementById('creature-photo').addEventListener('change', function(e)
             currentImageBase64 = event.target.result;
             document.getElementById('photo-preview').src = currentImageBase64;
         };
-        reader.readAsDataURL(file); // Converte a imagem para uma string Base64
+        reader.readAsDataURL(file); // Converte a imagem para uma string embutida
     }
 });
 
@@ -85,12 +82,11 @@ typeSelect.addEventListener('change', function() {
         wrapInteligencia.style.display = 'flex';
         wrapSabedoria.style.display = 'flex';
     }
-    // Se for "Simples", todos permanecem ocultos.
 });
 
 // 5. Formulário: Carimbar e Gerar Manuscrito (.json)
 document.getElementById('creature-form').addEventListener('submit', function(e) {
-    e.preventDefault(); // Evita que a página recarregue
+    e.preventDefault(); 
 
     // Constrói o Dossiê da Criatura
     const creatureData = {
@@ -117,25 +113,24 @@ document.getElementById('creature-form').addEventListener('submit', function(e) 
         }
     };
 
-    // Dispara o download automático para o computador do usuário
+    // Dispara o download automático do JSON gerado
     exportJson(creatureData);
 
-    // Alerta instrucional para o Magizoologista
-    alert(`Registro de ${creatureData.nome} efetuado!\n\nPara oficializá-lo no sistema automático:\n1. Mova o arquivo baixado para a pasta "/dados"\n2. Adicione o nome do arquivo no "indice.json".`);
+    // Alerta instrucional lembrando do fluxo do GitHub
+    alert(`Registro de ${creatureData.nome} criado com sucesso!\n\nLembre-se do protocolo do Ministério:\n1. Faça o upload deste arquivo baixado para a pasta "dados" no GitHub.\n2. Adicione o nome dele no "indice.json".`);
 
-    // Limpa a mesa de trabalho (Formulário)
+    // Limpa a mesa de trabalho
     this.reset();
     document.getElementById('photo-preview').src = '';
     currentImageBase64 = '';
-    typeSelect.dispatchEvent(new Event('change')); // Força a atualização da UI dos atributos
+    typeSelect.dispatchEvent(new Event('change')); 
 });
 
-// 6. Utilitário de Exportação (Força o Download do JSON)
+// 6. Utilitário de Exportação (Download do JSON)
 function exportJson(dataObj) {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataObj, null, 2));
     const downloadAnchorNode = document.createElement('a');
     
-    // Cria um nome de arquivo seguro (sem espaços ou caracteres especiais)
     const safeName = dataObj.nome.replace(/[^a-z0-9]/gi, '_').toLowerCase();
     
     downloadAnchorNode.setAttribute("href", dataStr);
@@ -145,18 +140,20 @@ function exportJson(dataObj) {
     downloadAnchorNode.remove();
 }
 
-// 7. ARQUIVO AUTOMÁTICO: Busca os registros no Servidor (Pasta /dados)
+// 7. ARQUIVO AUTOMÁTICO: Busca os registros no GitHub (Pasta /dados)
 async function loadArchive() {
     const listEl = document.getElementById('archive-list');
     const viewerEl = document.getElementById('creature-viewer');
     
-    // Estado de carregamento
-    listEl.innerHTML = '<li style="color: var(--magic-gold); text-align: center;">Consultando os arquivos restritos do Ministério...</li>';
+    // Parâmetro anti-cache para garantir que o GitHub entregue a versão mais nova do arquivo
+    const cacheBuster = `?t=${new Date().getTime()}`;
+    
+    listEl.innerHTML = '<li style="color: var(--magic-gold); text-align: center; padding: 15px;">Consultando os arquivos restritos do Ministério...</li>';
     viewerEl.innerHTML = '<div style="text-align: center; color: var(--border-color); margin-top: 50px;">Selecione uma criatura no índice para visualizar o registro completo.</div>';
 
     try {
-        // Passo A: Lê o arquivo de índice para saber quais monstros existem na pasta
-        const respostaIndice = await fetch('./dados/indice.json');
+        // Passo A: Lê o arquivo de índice
+        const respostaIndice = await fetch(`./dados/indice.json${cacheBuster}`);
         
         if (!respostaIndice.ok) {
             throw new Error("Arquivo indice.json não encontrado.");
@@ -171,26 +168,26 @@ async function loadArchive() {
 
         let archive = [];
 
-        // Passo B: Busca os dados de cada criatura listada no índice
+        // Passo B: Busca os dados de cada criatura listada
         for (let nomeArquivo of arquivos) {
             try {
-                const res = await fetch(`./dados/${nomeArquivo}`);
+                const res = await fetch(`./dados/${nomeArquivo}${cacheBuster}`);
                 if (res.ok) {
                     const dadosCriatura = await res.json();
                     archive.push(dadosCriatura);
                 } else {
-                    console.warn(`[Aviso do Ministério]: Não foi possível carregar o arquivo ${nomeArquivo}`);
+                    console.warn(`[Aviso do Ministério]: Não foi possível carregar ${nomeArquivo}`);
                 }
             } catch (err) {
-                console.warn(`[Aviso do Ministério]: Falha ao buscar ${nomeArquivo}. Ele existe na pasta?`);
+                console.warn(`[Aviso do Ministério]: Falha ao buscar ${nomeArquivo}. Ele existe na pasta "dados"?`);
             }
         }
 
-        // Passo C: Organiza o arquivo em ordem alfabética
+        // Passo C: Organiza alfabeticamente
         archive.sort((a, b) => a.nome.localeCompare(b.nome));
 
-        // Passo D: Renderiza a lista na interface
-        listEl.innerHTML = ''; // Limpa a mensagem de carregamento
+        // Passo D: Renderiza na tela
+        listEl.innerHTML = ''; 
         
         archive.forEach((creature) => {
             const li = document.createElement('li');
@@ -200,16 +197,14 @@ async function loadArchive() {
             span.className = 'creature-item-title';
             span.textContent = `${creature.nome} (${creature.classificacao})`;
             
-            // Ao clicar no nome, exibe os detalhes ao lado
             span.onclick = () => showCreatureDetails(creature);
 
-            // Botão para baixar uma cópia do registro
             const exportBtn = document.createElement('button');
             exportBtn.className = 'btn-teal';
             exportBtn.style.fontSize = '0.8rem';
             exportBtn.textContent = 'Extrair Cópia';
             exportBtn.onclick = (e) => {
-                e.stopPropagation(); // Evita que o clique acione a visualização de detalhes
+                e.stopPropagation(); 
                 exportJson(creature);
             };
 
@@ -221,12 +216,12 @@ async function loadArchive() {
     } catch (erro) {
         console.error("Erro burocrático:", erro);
         listEl.innerHTML = `
-            <li style="color: #ff6b6b; padding: 15px; border: 1px solid #ff6b6b; background: rgba(255,0,0,0.1);">
+            <li style="color: #ff6b6b; padding: 15px; border: 1px solid #ff6b6b; background: rgba(255,0,0,0.1); line-height: 1.5;">
                 <strong>Acesso Negado ou Falha de Conexão.</strong><br><br>
                 Certifique-se de que:<br>
-                1. Você está rodando a página em um Servidor (ex: Live Server do VS Code). A Fetch API não funciona abrindo o arquivo HTML direto com duplo-clique (file://).<br>
-                2. A pasta <code>/dados</code> existe ao lado do index.html.<br>
-                3. O arquivo <code>indice.json</code> existe dentro da pasta dados com a formatação correta.
+                1. A pasta <code>dados</code> (tudo em minúsculo) existe no seu repositório.<br>
+                2. O arquivo <code>indice.json</code> existe lá dentro e está com o formato correto.<br>
+                3. Você aguardou 1 ou 2 minutos após o commit no GitHub Pages.
             </li>`;
     }
 }
@@ -235,7 +230,7 @@ async function loadArchive() {
 function showCreatureDetails(c) {
     const viewer = document.getElementById('creature-viewer');
     
-    // Monta as insígnias dos atributos baseados no tipo
+    // Monta as insígnias baseadas no tipo
     let attrHtml = `
         <span class="attr-badge">Corpo: ${c.atributos.corpo}</span>
         <span class="attr-badge">Destreza: ${c.atributos.destreza}</span>
@@ -252,7 +247,6 @@ function showCreatureDetails(c) {
         attrHtml += `<span class="attr-badge">Sabedoria: ${c.atributos.sabedoria}</span>`;
     }
 
-    // Fallback caso a criatura não tenha foto
     const photoSrc = c.fotoBase64 ? c.fotoBase64 : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
     viewer.innerHTML = `
