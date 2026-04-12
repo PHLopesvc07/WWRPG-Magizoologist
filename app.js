@@ -31,9 +31,11 @@ function openTab(tabId, clickedBtn) {
     document.getElementById(tabId).classList.add('active');
     clickedBtn.classList.add('active');
 
-    // Se abriu a aba do Arquivo, dispara a busca automática nos dados do servidor (GitHub)
-    if(tabId === 'tab-archive') {
-        loadArchive();
+    // MÁGICA ACONTECE AQUI: Dispara a busca dependendo de qual aba foi aberta
+    if (tabId === 'tab-archive') {
+        loadArchive(); // Carrega as Criaturas
+    } else if (tabId === 'tab-archive-spell') {
+        loadSpellArchive(); // Carrega os Feitiços
     }
 }
 
