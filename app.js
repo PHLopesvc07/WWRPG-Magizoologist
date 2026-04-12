@@ -346,3 +346,217 @@ function showCreatureDetails(c) {
         </div>
     `;
 }
+
+// ====== GESTÃO DE FEITIÇOS ======
+let globalSpellArchive = [];
+
+// 1. Atualização do Formulário de Feitiços: Alerta ajustado para a nova pasta
+const spellForm = document.getElementById('spell-form');
+if (spellForm) {
+    spellForm.addEventListener('submit', function(e) {
+        e.preventDefault(); 
+
+        const spellData = {
+            name: document.getElementById('s-name').value,
+            cat: document.getElementById('s-cat').value,
+            lvl: document.getElementById('s-lvl').value,
+            desc: document.getElementById('s-desc').value
+        };
+
+        exportJsonSpell(spellData);
+
+        // Alerta atualizado para instruir o upload na pasta "feiticos"
+        alert(`O feitiço ${spellData.name} foi protocolado!\n\nProtocolo do Ministério:\n1. Upload para a pasta "feiticos" no GitHub.\n2. Registro do nome do arquivo no "feiticos/indice_feiticos.json".`);
+        this.reset();
+    });
+}
+
+// 2. Carregamento do Arquivo: Agora busca em ./feiticos/
+async function loadSpellArchive() {
+    const listEl = document.getElementById('archive-spell-list');
+    const viewerEl = document.getElementById('spell-viewer');
+    const cacheBuster = `?t=${new Date().getTime()}`;
+    
+    listEl.innerHTML = '<li style="color: var(--magic-gold); text-align: center; padding: 15px;">Acessando a Seção de Feitiços...</li>';
+    viewerEl.innerHTML = '<div style="text-align: center; color: var(--border-color); margin-top: 50px;">Selecione um feitiço no índice para visualizar o registro completo.</div>';
+
+    try {
+        // BUSCA O ÍNDICE DENTRO DA PASTA "FEITICOS"
+        const respostaIndice = await fetch(`./feiticos/indice_feiticos.json${cacheBuster}`);
+        
+        if (!respostaIndice.ok) throw new Error("Arquivo /feiticos/indice_feiticos.json não encontrado.");
+        
+        const arquivos = await respostaIndice.json();
+
+        if (arquivos.length === 0) {
+            listEl.innerHTML = '<li style="color: gray; padding: 10px;">O arquivo de feitiços está vazio.</li>';
+            return;
+        }
+
+        globalSpellArchive = [];
+
+        // BUSCA CADA ARQUIVO DENTRO DA PASTA "FEITICOS"
+        for (let nomeArquivo of arquivos) {
+            try {
+                const res = await fetch(`./feiticos/${nomeArquivo}${cacheBuster}`);
+                if (res.ok) {
+                    const dadosFeitico = await res.json();
+                    globalSpellArchive.push(dadosFeitico);
+                }
+            } catch (err) {
+                console.warn(`[Aviso]: Não foi possível carregar o feitiço ${nomeArquivo} da pasta /feiticos/`);
+            }
+        }
+
+        setupSpellFilterListeners();
+        applySpellFiltersAndRender();
+
+    } catch (erro) {
+        console.error("Erro no carregamento de feitiços:", erro);
+        listEl.innerHTML = `
+            <li style="color: #ff6b6b; padding: 15px; border: 1px solid #ff6b6b; background: rgba(255,0,0,0.1);">
+                <strong>Acesso Negado à Seção.</strong><br><br>
+                Certifique-se de que a pasta <code>feiticos</code> existe no repositório e contém o arquivo <code>indice_feiticos.json</code>.
+            </li>`;
+    }
+}
+
+// 11. Arquivo Automático de Feitiços (Fetch GitHub)
+async function loadSpellArchive() {
+    const listEl = document.getElementById('archive-spell-list');
+    const viewerEl = document.getElementById('spell-viewer');
+    const cacheBuster = `?t=${new Date().getTime()}`;
+    
+    listEl.innerHTML = '<li style="color: var(--magic-gold); text-align: center; padding: 15px;">Consultando o arquivo de Feitiços...</li>';
+    viewerEl.innerHTML = '<div style="text-align: center; color: var(--border-color); margin-top: 50px;">Selecione um feitiço no índice para visualizar o registro completo.</div>';
+
+    try {
+        // Criaremos um novo arquivo de índice somente para os feitiços
+        const respostaIndice = await fetch(`./dados/indice_feiticos.json${cacheBuster}`);
+        
+        if (!respostaIndice.ok) throw new Error("Arquivo indice_feiticos.json não encontrado.");
+        
+        const arquivos = await respostaIndice.json();
+
+        if (arquivos.length === 0) {
+            listEl.innerHTML = '<li style="color: gray; padding: 10px;">O índice de feitiços está vazio.</li>';
+            return;
+        }
+
+        globalSpellArchive = [];
+
+        // Busca o conteúdo real dos feitiços
+        for (let nomeArquivo of arquivos) {
+            try {
+                const res = await fetch(`./dados/${nomeArquivo}${cacheBuster}`);
+                if (res.ok) {
+                    const dadosFeitico = await res.json();
+                    globalSpellArchive.push(dadosFeitico);
+                }
+            } catch (err) {
+                console.warn(`[Aviso do Ministério]: Falha ao buscar feitiço ${nomeArquivo}.`);
+            }
+        }
+
+        setupSpellFilterListeners();
+        applySpellFiltersAndRender();
+
+    } catch (erro) {
+        console.error("Erro no arquivo de feitiços:", erro);
+        listEl.innerHTML = `<li style="color: #ff6b6b; padding: 15px;">Não foi possível carregar os feitiços. Verifique o "indice_feiticos.json".</li>`;
+    }
+}
+
+// 12. Filtros do Catálogo de Feitiços
+function setupSpellFilterListeners() {
+    document.getElementById('sort-order-spell').addEventListener('change', applySpellFiltersAndRender);
+    
+    const checkboxes = document.querySelectorAll('.filter-panel input[data-filter-spell]');
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', applySpellFiltersAndRender);
+    });
+}
+
+function applySpellFiltersAndRender() {
+    const listEl = document.getElementById('archive-spell-list');
+    listEl.innerHTML = '';
+
+    const activeFilters = {
+        cat: [],
+        lvl: []
+    };
+
+    // Capta os checkboxes marcados para a aba de Feitiços
+    document.querySelectorAll('.filter-panel input[data-filter-spell]:checked').forEach(cb => {
+        const category = cb.getAttribute('data-filter-spell');
+        activeFilters[category].push(cb.value);
+    });
+
+    let filteredSpells = globalSpellArchive.filter(spell => {
+        let isValid = true;
+        for (const category in activeFilters) {
+            if (activeFilters[category].length > 0) {
+                const spellAttr = String(spell[category]); 
+                if (!activeFilters[category].includes(spellAttr)) {
+                    isValid = false;
+                    break;
+                }
+            }
+        }
+        return isValid;
+    });
+
+    const sortOrder = document.getElementById('sort-order-spell').value;
+    filteredSpells.sort((a, b) => {
+        const valA = a.name.toLowerCase();
+        const valB = b.name.toLowerCase();
+        return sortOrder === 'AZ' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+    });
+
+    if (filteredSpells.length === 0) {
+        listEl.innerHTML = '<li style="color: gray; padding: 10px; text-align:center;">Nenhum encatamento encontrado.</li>';
+        return;
+    }
+
+    filteredSpells.forEach((spell) => {
+        const li = document.createElement('li');
+        li.className = 'creature-item'; // Reutilizando as classes de css já existentes
+        
+        const span = document.createElement('span');
+        span.className = 'creature-item-title';
+        span.textContent = `${spell.name} (Nível ${spell.lvl})`;
+        span.onclick = () => showSpellDetails(spell);
+
+        const exportBtn = document.createElement('button');
+        exportBtn.className = 'btn-teal';
+        exportBtn.style.fontSize = '0.8rem';
+        exportBtn.textContent = 'Extrair Cópia';
+        exportBtn.onclick = (e) => {
+            e.stopPropagation(); 
+            exportJsonSpell(spell);
+        };
+
+        li.appendChild(span);
+        li.appendChild(exportBtn);
+        listEl.appendChild(li);
+    });
+}
+
+// 13. Exibir o preview do feitiço formatado no painel direito
+function showSpellDetails(s) {
+    const viewer = document.getElementById('spell-viewer');
+    viewer.innerHTML = `
+        <div class="details-header" style="display: block;">
+            <h2 style="margin: 0 0 10px 0; color: var(--magic-gold);">${s.name}</h2>
+            <div style="margin-bottom: 15px;">
+                <p style="margin: 5px 0;"><strong>Categoria:</strong> ${s.cat}</p>
+                <p style="margin: 5px 0;"><strong>Nível:</strong> ${s.lvl}</p>
+            </div>
+            
+            <div class="bureaucracy-box" style="padding: 15px; margin-bottom: 15px;">
+                <h3 style="margin-top: 0; font-size: 1rem; color: var(--magic-gold);">Descrição e Efeitos</h3>
+                <p style="line-height: 1.5; white-space: pre-wrap; font-size: 0.95rem;">${s.desc}</p>
+            </div>
+        </div>
+    `;
+}

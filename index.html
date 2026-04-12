@@ -18,7 +18,7 @@
         <button class="tab-btn active" data-target="tab-register">I. Registrar Criatura</button>
         <button class="tab-btn" data-target="tab-archive">II. Arquivo de Criaturas</button>
         <button class="tab-btn active" data-target="tab-register">III. Registrar Feitiço</button>
-        <button class="tab-btn" data-target="tab-archive">IIII. Arquivo de Feitiços</button>
+        <button class="tab-btn" data-target="tab-archive">IV. Arquivo de Feitiços</button>
     </div>
 
     <main>
@@ -225,6 +225,104 @@
                 </div>
             </div>
         </section>
+
+        <section id="tab-register-spell" class="tab-content">
+            <form id="spell-form">
+                <div class="bureaucracy-box">
+                    <h2>Dados do Feitiço</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nome do Feitiço / Encantamento</label>
+                            <input type="text" id="s-name" class="ink-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select id="s-cat" class="ink-select" required>
+                                <option value="Transfiguração">Transfiguração</option>
+                                <option value="Feitiço" selected>Feitiço (Charme)</option>
+                                <option value="Azaração">Azaração</option>
+                                <option value="Maldição Menor">Maldição Menor</option>
+                                <option value="Maldição">Maldição</option>
+                                <option value="Contra-feitiço">Contra-feitiço</option>
+                                <option value="Cura">Cura</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nível de Domínio</label>
+                            <select id="s-lvl" class="ink-select" required>
+                                <option value="1" selected>Nível 1</option>
+                                <option value="2">Nível 2</option>
+                                <option value="3">Nível 3</option>
+                                <option value="4">Nível 4</option>
+                                <option value="5">Nível 5</option>
+                                <option value="6">Nível 6</option>
+                                <option value="7">Nível 7</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Descrição do Efeito Mágico</label>
+                            <textarea id="s-desc" class="ink-textarea" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn-gold">Carimbar e Salvar Feitiço</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="tab-archive-spell" class="tab-content">
+            <div class="bureaucracy-box">
+                <div class="archive-grid">
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <h2>Índice Registrado</h2>
+                        
+                        <div class="filter-panel bureaucracy-box" style="padding: 10px; margin: 0; box-shadow: none;">
+                            <h3 style="margin-top:0; font-size: 1rem; color: var(--magic-gold);">Filtros de Pesquisa</h3>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label>Ordenação Alfabética</label>
+                                <select id="sort-order-spell" class="ink-select">
+                                    <option value="AZ" selected>A - Z</option>
+                                    <option value="ZA">Z - A</option>
+                                </select>
+                            </div>
+
+                            <details class="filter-details">
+                                <summary>Categoria</summary>
+                                <label><input type="checkbox" value="Transfiguração" data-filter-spell="cat"> Transfiguração</label>
+                                <label><input type="checkbox" value="Feitiço" data-filter-spell="cat"> Feitiço</label>
+                                <label><input type="checkbox" value="Azaração" data-filter-spell="cat"> Azaração</label>
+                                <label><input type="checkbox" value="Maldição Menor" data-filter-spell="cat"> Maldição Menor</label>
+                                <label><input type="checkbox" value="Maldição" data-filter-spell="cat"> Maldição</label>
+                                <label><input type="checkbox" value="Contra-feitiço" data-filter-spell="cat"> Contra-feitiço</label>
+                                <label><input type="checkbox" value="Cura" data-filter-spell="cat"> Cura</label>
+                            </details>
+
+                            <details class="filter-details">
+                                <summary>Nível</summary>
+                                <label><input type="checkbox" value="1" data-filter-spell="lvl"> Nível 1</label>
+                                <label><input type="checkbox" value="2" data-filter-spell="lvl"> Nível 2</label>
+                                <label><input type="checkbox" value="3" data-filter-spell="lvl"> Nível 3</label>
+                                <label><input type="checkbox" value="4" data-filter-spell="lvl"> Nível 4</label>
+                                <label><input type="checkbox" value="5" data-filter-spell="lvl"> Nível 5</label>
+                                <label><input type="checkbox" value="6" data-filter-spell="lvl"> Nível 6</label>
+                                <label><input type="checkbox" value="7" data-filter-spell="lvl"> Nível 7</label>
+                            </details>
+                        </div>
+
+                        <ul class="creature-list" id="archive-spell-list"></ul>
+                    </div>
+                    
+                    <div class="creature-details" id="spell-viewer">
+                        <div style="text-align: center; color: var(--border-color); margin-top: 50px;">
+                            Selecione um feitiço no índice para visualizar o registro completo.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
 
     </main>
 </body>
