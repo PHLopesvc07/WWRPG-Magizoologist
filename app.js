@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Configura os Botões do Modo de Lista (Aba de Feitiços)
+    // Configura os Botões do Modo de Lista (Exclusivo da Aba de Feitiços)
     const btnCreate = document.getElementById('btn-create-list');
     const btnSave = document.getElementById('btn-save-list');
     const btnCancel = document.getElementById('btn-cancel-list');
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             btnCreate.style.display = 'inline-block';
             if(btnSave) btnSave.style.display = 'none';
-            btnCancel.style.display = 'none';
+            if(btnCancel) btnCancel.style.display = 'none';
             
             applySpellFiltersAndRender(); // Re-renderiza sem checkboxes
         });
@@ -64,8 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Resgata os objetos completos baseados nos nomes selecionados
             const selectedSpells = globalSpellArchive.filter(spell => selectedSpellsSet.has(spell.name));
 
-            // Exporta a lista consolidada
-            exportSpellList(selectedSpells);
+            // Exporta a lista consolidada num único JSON
+            exportJson(selectedSpells, 'lista_feiticos_ministerio');
 
             // Volta ao estado normal da interface
             isListMode = false;
@@ -190,7 +190,7 @@ if (creatureForm) {
     });
 }
 
-// 6. Leitura do Arquivo de Criaturas (Fetch Github/Local)
+// 6. Leitura do Arquivo de Criaturas (Pasta /dados/)
 async function loadArchive() {
     const listEl = document.getElementById('archive-list');
     const viewerEl = document.getElementById('creature-viewer');
@@ -237,7 +237,7 @@ function setupFilterListeners() {
     const sortOrder = document.getElementById('sort-order');
     if (sortOrder) sortOrder.addEventListener('change', applyFiltersAndRender);
     
-    document.querySelectorAll('.filter-panel input[type="checkbox"]:not(.spell-filter)').forEach(cb => {
+    document.querySelectorAll('.filter-panel input[type="checkbox"]:not([data-filter-spell])').forEach(cb => {
         cb.addEventListener('change', applyFiltersAndRender);
     });
 }
@@ -525,6 +525,7 @@ function exportJson(dataObj, baseName) {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataObj, null, 2));
     const downloadAnchorNode = document.createElement('a');
     
+    // Assegura que o nome do ficheiro é seguro para gravação
     const safeName = baseName.replace(/[^a-z0-9_]/gi, '_').toLowerCase();
     
     downloadAnchorNode.setAttribute("href", dataStr);
@@ -532,8 +533,4 @@ function exportJson(dataObj, baseName) {
     document.body.appendChild(downloadAnchorNode);
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
-}
-
-function exportSpellList(spellArray) {
-    exportJson(spellArray, 'lista_feiticos_ministerio');
 }
