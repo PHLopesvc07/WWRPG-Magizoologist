@@ -374,7 +374,7 @@ if (spellForm) {
     });
 }
 
-// 2. Utilitário de Exportação (Idêntico ao de Criaturas)
+// 2. Utilitário de Exportação
 function exportJsonSpell(dataObj) {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataObj, null, 2));
     const downloadAnchorNode = document.createElement('a');
@@ -405,6 +405,12 @@ async function loadSpellArchive() {
         if (!respostaIndice.ok) throw new Error("Índice de feitiços não encontrado.");
         
         const arquivos = await respostaIndice.json();
+        
+        if (arquivos.length === 0) {
+            listEl.innerHTML = '<li style="color: gray; padding: 10px;">O índice de feitiços está vazio.</li>';
+            return;
+        }
+
         globalSpellArchive = [];
 
         // Carrega cada feitiço individualmente da pasta /feiticos/
@@ -425,58 +431,11 @@ async function loadSpellArchive() {
 
     } catch (erro) {
         console.error("Erro burocrático:", erro);
-        listEl.innerHTML = `<li style="color: #ff6b6b; padding: 15px;">Erro: Certifique-se de que a pasta /feiticos/ existe.</li>`;
+        listEl.innerHTML = `<li style="color: #ff6b6b; padding: 15px;">Erro: Certifique-se de que a pasta "feiticos" existe na raiz e contém o arquivo "indice_feiticos.json".</li>`;
     }
 }
 
-// Funções de filtro e renderização permanecem as mesmas, garantindo a consulta local.
-// 11. Arquivo Automático de Feitiços (Fetch GitHub)
-async function loadSpellArchive() {
-    const listEl = document.getElementById('archive-spell-list');
-    const viewerEl = document.getElementById('spell-viewer');
-    const cacheBuster = `?t=${new Date().getTime()}`;
-    
-    listEl.innerHTML = '<li style="color: var(--magic-gold); text-align: center; padding: 15px;">Consultando o arquivo de Feitiços...</li>';
-    viewerEl.innerHTML = '<div style="text-align: center; color: var(--border-color); margin-top: 50px;">Selecione um feitiço no índice para visualizar o registro completo.</div>';
-
-    try {
-        // Criaremos um novo arquivo de índice somente para os feitiços
-        const respostaIndice = await fetch(`./dados/indice_feiticos.json${cacheBuster}`);
-        
-        if (!respostaIndice.ok) throw new Error("Arquivo indice_feiticos.json não encontrado.");
-        
-        const arquivos = await respostaIndice.json();
-
-        if (arquivos.length === 0) {
-            listEl.innerHTML = '<li style="color: gray; padding: 10px;">O índice de feitiços está vazio.</li>';
-            return;
-        }
-
-        globalSpellArchive = [];
-
-        // Busca o conteúdo real dos feitiços
-        for (let nomeArquivo of arquivos) {
-            try {
-                const res = await fetch(`./dados/${nomeArquivo}${cacheBuster}`);
-                if (res.ok) {
-                    const dadosFeitico = await res.json();
-                    globalSpellArchive.push(dadosFeitico);
-                }
-            } catch (err) {
-                console.warn(`[Aviso do Ministério]: Falha ao buscar feitiço ${nomeArquivo}.`);
-            }
-        }
-
-        setupSpellFilterListeners();
-        applySpellFiltersAndRender();
-
-    } catch (erro) {
-        console.error("Erro no arquivo de feitiços:", erro);
-        listEl.innerHTML = `<li style="color: #ff6b6b; padding: 15px;">Não foi possível carregar os feitiços. Verifique o "indice_feiticos.json".</li>`;
-    }
-}
-
-// 12. Filtros do Catálogo de Feitiços
+// 4. Filtros do Catálogo de Feitiços
 function setupSpellFilterListeners() {
     document.getElementById('sort-order-spell').addEventListener('change', applySpellFiltersAndRender);
     
@@ -523,13 +482,13 @@ function applySpellFiltersAndRender() {
     });
 
     if (filteredSpells.length === 0) {
-        listEl.innerHTML = '<li style="color: gray; padding: 10px; text-align:center;">Nenhum encatamento encontrado.</li>';
+        listEl.innerHTML = '<li style="color: gray; padding: 10px; text-align:center;">Nenhum encantamento encontrado.</li>';
         return;
     }
 
     filteredSpells.forEach((spell) => {
         const li = document.createElement('li');
-        li.className = 'creature-item'; // Reutilizando as classes de css já existentes
+        li.className = 'creature-item'; 
         
         const span = document.createElement('span');
         span.className = 'creature-item-title';
@@ -551,7 +510,7 @@ function applySpellFiltersAndRender() {
     });
 }
 
-// 13. Exibir o preview do feitiço formatado no painel direito
+// 5. Exibir o preview do feitiço formatado no painel direito
 function showSpellDetails(s) {
     const viewer = document.getElementById('spell-viewer');
     viewer.innerHTML = `
