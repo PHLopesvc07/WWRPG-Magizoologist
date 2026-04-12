@@ -347,15 +347,16 @@ function showCreatureDetails(c) {
     `;
 }
 
-// ====== GESTÃO DE FEITIÇOS ======
+// ====== GESTÃO DE FEITIÇOS (PROTOCOLO DE DOWNLOAD LOCAL) ======
 let globalSpellArchive = [];
 
-// 1. Atualização do Formulário de Feitiços: Alerta ajustado para a nova pasta
+// 1. Evento de Submissão: Salva diretamente no PC do usuário
 const spellForm = document.getElementById('spell-form');
 if (spellForm) {
     spellForm.addEventListener('submit', function(e) {
         e.preventDefault(); 
 
+        // Constrói o objeto no formato do repositório 'Ficha'
         const spellData = {
             name: document.getElementById('s-name').value,
             cat: document.getElementById('s-cat').value,
@@ -363,39 +364,50 @@ if (spellForm) {
             desc: document.getElementById('s-desc').value
         };
 
+        // Dispara o download automático do JSON
         exportJsonSpell(spellData);
 
-        // Alerta atualizado para instruir o upload na pasta "feiticos"
-        alert(`O feitiço ${spellData.name} foi protocolado!\n\nProtocolo do Ministério:\n1. Upload para a pasta "feiticos" no GitHub.\n2. Registro do nome do arquivo no "feiticos/indice_feiticos.json".`);
+        // Alerta informativo (sem funções de rede, apenas instruções)
+        alert(`Manuscrito de "${spellData.name}" gerado com sucesso!\n\nPara que ele apareça no catálogo:\n1. Mova o arquivo baixado para a pasta "feiticos".\n2. Adicione o nome dele no "feiticos/indice_feiticos.json".`);
+        
         this.reset();
     });
 }
 
-// 2. Carregamento do Arquivo: Agora busca em ./feiticos/
+// 2. Utilitário de Exportação (Idêntico ao de Criaturas)
+function exportJsonSpell(dataObj) {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataObj, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    
+    // Formata o nome do arquivo (ex: feitico_lumos.json)
+    const safeName = dataObj.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", `feitico_${safeName}.json`);
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
+
+// 3. Leitura do Arquivo a partir da pasta /feiticos/
 async function loadSpellArchive() {
     const listEl = document.getElementById('archive-spell-list');
     const viewerEl = document.getElementById('spell-viewer');
     const cacheBuster = `?t=${new Date().getTime()}`;
     
-    listEl.innerHTML = '<li style="color: var(--magic-gold); text-align: center; padding: 15px;">Acessando a Seção de Feitiços...</li>';
-    viewerEl.innerHTML = '<div style="text-align: center; color: var(--border-color); margin-top: 50px;">Selecione um feitiço no índice para visualizar o registro completo.</div>';
+    listEl.innerHTML = '<li style="color: var(--magic-gold); text-align: center; padding: 15px;">Consultando registros na pasta /feiticos/...</li>';
+    viewerEl.innerHTML = '<div style="text-align: center; color: var(--border-color); margin-top: 50px;">Selecione um feitiço no índice.</div>';
 
     try {
-        // BUSCA O ÍNDICE DENTRO DA PASTA "FEITICOS"
+        // Busca o índice dentro da pasta específica de feitiços
         const respostaIndice = await fetch(`./feiticos/indice_feiticos.json${cacheBuster}`);
         
-        if (!respostaIndice.ok) throw new Error("Arquivo /feiticos/indice_feiticos.json não encontrado.");
+        if (!respostaIndice.ok) throw new Error("Índice de feitiços não encontrado.");
         
         const arquivos = await respostaIndice.json();
-
-        if (arquivos.length === 0) {
-            listEl.innerHTML = '<li style="color: gray; padding: 10px;">O arquivo de feitiços está vazio.</li>';
-            return;
-        }
-
         globalSpellArchive = [];
 
-        // BUSCA CADA ARQUIVO DENTRO DA PASTA "FEITICOS"
+        // Carrega cada feitiço individualmente da pasta /feiticos/
         for (let nomeArquivo of arquivos) {
             try {
                 const res = await fetch(`./feiticos/${nomeArquivo}${cacheBuster}`);
@@ -404,7 +416,7 @@ async function loadSpellArchive() {
                     globalSpellArchive.push(dadosFeitico);
                 }
             } catch (err) {
-                console.warn(`[Aviso]: Não foi possível carregar o feitiço ${nomeArquivo} da pasta /feiticos/`);
+                console.warn(`Falha ao ler feitiço: ${nomeArquivo}`);
             }
         }
 
@@ -412,15 +424,12 @@ async function loadSpellArchive() {
         applySpellFiltersAndRender();
 
     } catch (erro) {
-        console.error("Erro no carregamento de feitiços:", erro);
-        listEl.innerHTML = `
-            <li style="color: #ff6b6b; padding: 15px; border: 1px solid #ff6b6b; background: rgba(255,0,0,0.1);">
-                <strong>Acesso Negado à Seção.</strong><br><br>
-                Certifique-se de que a pasta <code>feiticos</code> existe no repositório e contém o arquivo <code>indice_feiticos.json</code>.
-            </li>`;
+        console.error("Erro burocrático:", erro);
+        listEl.innerHTML = `<li style="color: #ff6b6b; padding: 15px;">Erro: Certifique-se de que a pasta /feiticos/ existe.</li>`;
     }
 }
 
+// Funções de filtro e renderização permanecem as mesmas, garantindo a consulta local.
 // 11. Arquivo Automático de Feitiços (Fetch GitHub)
 async function loadSpellArchive() {
     const listEl = document.getElementById('archive-spell-list');
