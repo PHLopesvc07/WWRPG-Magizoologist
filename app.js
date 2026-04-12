@@ -77,6 +77,27 @@ document.addEventListener('DOMContentLoaded', () => {
             applySpellFiltersAndRender();
         });
     }
+
+    // --- LÓGICA DE INJÚRIAS PARA CRIATURAS (NOVO) ---
+    const btnAddInjury = document.getElementById('btn-add-injury');
+    const customInjuriesContainer = document.getElementById('custom-injuries-container');
+    
+    if (btnAddInjury && customInjuriesContainer) {
+        btnAddInjury.addEventListener('click', () => {
+            const div = document.createElement('div');
+            div.className = 'custom-injury-row';
+            div.style = 'display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 5px;';
+            div.innerHTML = `
+                <input type="text" class="ink-input injury-name" placeholder="Condição" style="width: 140px;">
+                <input type="number" class="ink-input short-input injury-curr" value="0" min="0"> / 
+                <input type="number" class="ink-input short-input injury-max" value="0" min="0">
+                <button type="button" class="btn-danger btn-delete-injury" style="padding: 4px 8px;">X</button>
+            `;
+            // Lógica para excluir a linha recém-criada
+            div.querySelector('.btn-delete-injury').addEventListener('click', () => div.remove());
+            customInjuriesContainer.appendChild(div);
+        });
+    }
 });
 
 // ====== 2. NAVEGAÇÃO ======
@@ -155,6 +176,13 @@ if (creatureForm) {
     creatureForm.addEventListener('submit', function(e) {
         e.preventDefault(); 
 
+        // CAPTURA AS INJÚRIAS CUSTOMIZADAS
+        const customInjuries = Array.from(document.querySelectorAll('#custom-injuries-container .custom-injury-row')).map(row => ({
+            name: row.querySelector('.injury-name').value,
+            curr: row.querySelector('.injury-curr').value,
+            max: row.querySelector('.injury-max').value
+        }));
+
         const creatureData = {
             id: Date.now().toString(),
             nome: document.getElementById('c-name').value,
@@ -176,6 +204,13 @@ if (creatureForm) {
                 carisma: parseInt(document.getElementById('attr-carisma').value) || 0,
                 inteligencia: parseInt(document.getElementById('attr-inteligencia').value) || 0,
                 sabedoria: parseInt(document.getElementById('attr-sabedoria').value) || 0
+            },
+            // NOVOS DADOS DE INJÚRIA SALVOS NO JSON
+            injuries: {
+                leve: { curr: document.getElementById('c-inj-leve-curr')?.value || 0, max: document.getElementById('c-inj-leve-max')?.value || 0 },
+                media: { curr: document.getElementById('c-inj-media-curr')?.value || 0, max: document.getElementById('c-inj-media-max')?.value || 0 },
+                pesada: { curr: document.getElementById('c-inj-pesada-curr')?.value || 0, max: document.getElementById('c-inj-pesada-max')?.value || 0 },
+                custom: customInjuries
             }
         };
 
@@ -186,6 +221,7 @@ if (creatureForm) {
         this.reset();
         document.getElementById('photo-preview').src = '';
         currentImageBase64 = '';
+        document.getElementById('custom-injuries-container').innerHTML = ''; // Limpa injúrias extras na interface
         typeSelect.dispatchEvent(new Event('change')); 
     });
 }
@@ -305,16 +341,44 @@ function applyFiltersAndRender() {
 
 function showCreatureDetails(c) {
     const viewer = document.getElementById('creature-viewer');
+    
+    // GERA HTML DOS ATRIBUTOS
     let attrHtml = `
-        <span class="attr-badge">Corpo: ${c.atributos.corpo}</span>
-        <span class="attr-badge">Destreza: ${c.atributos.destreza}</span>
-        <span class="attr-badge">Vitalidade: ${c.atributos.vitalidade}</span>
+        <span class="attr-badge">Corpo: ${c.atributos?.corpo || 0}</span>
+        <span class="attr-badge">Destreza: ${c.atributos?.destreza || 0}</span>
+        <span class="attr-badge">Vitalidade: ${c.atributos?.vitalidade || 0}</span>
     `;
-    if (['Bestial', 'Neutro', 'Consciente'].includes(c.tipo)) attrHtml += `<span class="attr-badge">Instinto: ${c.atributos.instinto}</span>`;
-    if (['Neutro', 'Consciente'].includes(c.tipo)) attrHtml += `<span class="attr-badge">Carisma: ${c.atributos.carisma}</span>`;
+    if (['Bestial', 'Neutro', 'Consciente'].includes(c.tipo)) attrHtml += `<span class="attr-badge">Instinto: ${c.atributos?.instinto || 0}</span>`;
+    if (['Neutro', 'Consciente'].includes(c.tipo)) attrHtml += `<span class="attr-badge">Carisma: ${c.atributos?.carisma || 0}</span>`;
     if (c.tipo === 'Consciente') {
-        attrHtml += `<span class="attr-badge">Inteligência: ${c.atributos.inteligencia}</span>`;
-        attrHtml += `<span class="attr-badge">Sabedoria: ${c.atributos.sabedoria}</span>`;
+        attrHtml += `<span class="attr-badge">Inteligência: ${c.atributos?.inteligencia || 0}</span>`;
+        attrHtml += `<span class="attr-badge">Sabedoria: ${c.atributos?.sabedoria || 0}</span>`;
+    }
+
+    // GERA HTML DAS INJÚRIAS (NOVO)
+    let injuriesHtml = '';
+    if (c.injuries) {
+        let customHtml = '';
+        if (c.injuries.custom && c.injuries.custom.length > 0) {
+            customHtml = '<h4 style="margin: 10px 0 5px 0; font-size: 0.9rem; color: var(--magic-gold);">Condições Especiais:</h4>';
+            c.injuries.custom.forEach(inj => {
+                if(inj.name) {
+                    customHtml += `<p style="margin: 3px 0;"><strong>${inj.name}:</strong> ${inj.curr} / ${inj.max}</p>`;
+                }
+            });
+        }
+
+        injuriesHtml = `
+            <div class="bureaucracy-box" style="padding: 10px; margin-bottom: 15px;">
+                <h3 style="margin-top: 0; font-size: 1rem;">Prontuário Médico</h3>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <span class="attr-badge" style="background: rgba(183, 28, 28, 0.1); border-color: #b71c1c;">Leve: ${c.injuries.leve?.curr || 0}/${c.injuries.leve?.max || 0}</span>
+                    <span class="attr-badge" style="background: rgba(183, 28, 28, 0.1); border-color: #b71c1c;">Média: ${c.injuries.media?.curr || 0}/${c.injuries.media?.max || 0}</span>
+                    <span class="attr-badge" style="background: rgba(183, 28, 28, 0.1); border-color: #b71c1c;">Pesada: ${c.injuries.pesada?.curr || 0}/${c.injuries.pesada?.max || 0}</span>
+                </div>
+                ${customHtml}
+            </div>
+        `;
     }
 
     const photoSrc = c.fotoBase64 ? c.fotoBase64 : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
@@ -337,7 +401,8 @@ function showCreatureDetails(c) {
             <h3 style="margin-top: 0; font-size: 1rem;">Atributos Mágicos / Físicos</h3>
             ${attrHtml}
         </div>
-        <div>
+
+        ${injuriesHtml} <div>
             <h3 style="margin-top: 0; font-size: 1rem; color: var(--magic-gold);">Descrição e Notas</h3>
             <p style="line-height: 1.5; white-space: pre-wrap; font-size: 0.95rem;">${c.descricao}</p>
         </div>

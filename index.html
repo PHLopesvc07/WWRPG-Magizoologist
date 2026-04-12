@@ -153,6 +153,38 @@
                     </div>
                 </div>
 
+                </div>
+            </div>
+
+            <div class="bureaucracy-box">
+                <h2>Prontuário Médico (Injúrias Base)</h2>
+                <div class="form-grid" style="grid-template-columns: 1fr; gap: 15px;">
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <label style="width: 140px;">Leve (Atual/Máx):</label>
+                        <input type="number" id="c-inj-leve-curr" class="ink-input short-input" value="0" min="0"> /
+                        <input type="number" id="c-inj-leve-max" class="ink-input short-input" value="0" min="0">
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <label style="width: 140px;">Média (Atual/Máx):</label>
+                        <input type="number" id="c-inj-media-curr" class="ink-input short-input" value="0" min="0"> /
+                        <input type="number" id="c-inj-media-max" class="ink-input short-input" value="0" min="0">
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <label style="width: 140px;">Pesada (Atual/Máx):</label>
+                        <input type="number" id="c-inj-pesada-curr" class="ink-input short-input" value="0" min="0"> /
+                        <input type="number" id="c-inj-pesada-max" class="ink-input short-input" value="0" min="0">
+                    </div>
+                    
+                    <div id="custom-injuries-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 5px;"></div>
+                    <button type="button" id="btn-add-injury" class="btn-teal" style="align-self: flex-start; font-size: 0.85rem;">+ Adicionar Condição Especial</button>
+                </div>
+            </div>
+            <div style="text-align: right; margin-top: 20px;">
+                <button type="submit" class="btn-gold">Carimbar e Salvar Arquivo</button>
+            </div>
+        </form>
+    </section>
+
                 <div style="text-align: right;">
                     <button type="submit" class="btn-gold">Carimbar e Salvar Arquivo</button>
                 </div>
