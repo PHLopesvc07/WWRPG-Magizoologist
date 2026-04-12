@@ -62,8 +62,8 @@ Como o sistema não possui uma base de dados tradicional (SQL/NoSQL), ele utiliz
 1. Abra o sistema e vá à aba **I. Registrar Feitiço**.
 2. Preencha todos os dados.
 3. Clique em **"Carimbar e Salvar Arquivo"**. O navegador fará o download de um ficheiro `.json` (ex: `feitico_expelliarmus.json`).
-4. Mova este ficheiro para dentro da pasta `dados/` no diretório do seu projeto.
-5. Abra o ficheiro `dados/indice.json` e adicione o nome exato do novo ficheiro na lista. Exemplo:
+4. Mova este ficheiro para dentro da pasta `feiticos/` no diretório do seu projeto.
+5. Abra o ficheiro `feiticos/indice_feiticos.json` e adicione o nome exato do novo ficheiro na lista. Exemplo:
    ```json
    [
      "feitico_lumos.json",
