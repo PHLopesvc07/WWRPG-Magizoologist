@@ -69,3 +69,37 @@ Como o sistema não possui uma base de dados tradicional (SQL/NoSQL), ele utiliz
      "feitico_lumos.json",
      "feitico_expelliarmus.json"
    ]
+## Arquitetura e Tecnologias Utilizadas
+
+Este projeto adota uma arquitetura **Front-end Vanilla** robusta e modularizada, baseada nos princípios de *Clean Code*, *DRY* (Don't Repeat Yourself) e *Separação de Preocupações* (SoC). Não há dependências de frameworks externos (sem React, Vue ou bibliotecas de terceiros), mantendo a aplicação leve e de fácil hospedagem (como no GitHub Pages).
+
+* **HTML5:** Estrutura semântica e acessível, com carregamento modular via `<script type="module">`.
+* **CSS3 Modularizado:** Estilos divididos por responsabilidade (`variables.css`, `base.css`, `layout.css` e `components.css`). Utilização de *CSS Variables* (Design Tokens) para manter o esquema de cores em tons de pergaminho, tinta e ouro mágico centralizado.
+* **JavaScript ES6+ (Padrão MVC):** * **Controllers:** Classes independentes (`TabController`, `CreatureController`, `SpellController`) gerenciam a lógica de UI e regras de negócio.
+  * **Services:** Abstração da camada de dados (`database.js`) para manipulação de leitura/escrita (*Fetch API* e download de blobs).
+  * **Comunicação Desacoplada:** Utilização de `CustomEvent` nativos para comunicação reativa entre módulos independentes (Event-Driven UI).
+  * **Utils:** Funções puras utilitárias (ex: conversão *FileReader*) centralizadas para evitar repetição de código.
+
+### Estrutura de Diretórios
+```text
+📦 wwrpg-catalog
+ ┣ 📂 css
+ ┃ ┣ 📜 main.css          # Ponto de entrada CSS
+ ┃ ┣ 📜 variables.css     # Design Tokens
+ ┃ ┣ 📜 base.css          # Resets e estilos nativos
+ ┃ ┣ 📜 layout.css        # Estruturas de macro-layout
+ ┃ ┗ 📜 components.css    # UI Kits (botões, inputs, cards)
+ ┣ 📂 dados               # Ficheiros JSON do arquivo de Criaturas
+ ┣ 📂 feiticos            # Ficheiros JSON do arquivo de Feitiços
+ ┣ 📂 js
+ ┃ ┣ 📂 controllers
+ ┃ ┃ ┣ 📜 TabController.js
+ ┃ ┃ ┣ 📜 CreatureController.js
+ ┃ ┃ ┗ 📜 SpellController.js
+ ┃ ┣ 📂 services
+ ┃ ┃ ┗ 📜 database.js     # Camada de abstração de Dados
+ ┃ ┣ 📂 utils
+ ┃ ┃ ┗ 📜 helpers.js      # Funções auxiliares (DRY)
+ ┃ ┗ 📜 main.js           # Ponto de entrada JS (Bootstrapper)
+ ┣ 📜 index.html
+ ┗ 📜 README.md
