@@ -8,8 +8,9 @@ export class TabController {
     init() {
         this.tabButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const targetId = e.target.getAttribute('data-target');
-                this.openTab(targetId, e.target);
+                // e.currentTarget garante que estamos pegando o atributo do botão, e não do texto dentro dele
+                const targetId = e.currentTarget.getAttribute('data-target');
+                this.openTab(targetId, e.currentTarget);
             });
         });
     }
