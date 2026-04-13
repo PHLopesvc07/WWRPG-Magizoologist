@@ -12,6 +12,17 @@ header h1 {
     letter-spacing: 2px;
     font-size: 1.5rem;
 }
-main { width: 100%; max-width: 900px; }
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-.archive-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+main {
+    width: 100%;
+    max-width: 900px;
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+.archive-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+}

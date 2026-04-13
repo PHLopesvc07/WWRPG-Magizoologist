@@ -21,7 +21,6 @@ export class TabController {
         document.getElementById(tabId).classList.add('active');
         clickedBtn.classList.add('active');
 
-        // Notifica o restante da aplicação qual aba foi ativada
         document.dispatchEvent(new CustomEvent('tab-opened', { detail: { tabId } }));
     }
 }

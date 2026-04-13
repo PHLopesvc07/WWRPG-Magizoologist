@@ -3,7 +3,6 @@ import { CreatureController } from './controllers/CreatureController.js';
 import { SpellController } from './controllers/SpellController.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // A Injeção de Dependências ou Instanciação Modular começa aqui.
     console.log("Inicializando o Ministério da Magia - DRCCM...");
 
     const tabController = new TabController();

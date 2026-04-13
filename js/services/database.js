@@ -1,12 +1,7 @@
 import { exportJson } from '../utils/helpers.js';
 
 export const DatabaseService = {
-    /**
-     * Busca todos os registros de uma determinada coleção (pasta).
-     * @param {string} collectionPath - Caminho da pasta (ex: './dados')
-     * @param {string} indexFile - Nome do índice (ex: 'indice.json')
-     */
-    async fetchCollection(collectionPath, indexFile = 'indice.json') {
+    async fetchCollection(collectionPath, indexFile) {
         const cacheBuster = `?t=${new Date().getTime()}`;
         try {
             const indexResponse = await fetch(`${collectionPath}/${indexFile}${cacheBuster}`);
@@ -20,7 +15,7 @@ export const DatabaseService = {
                     const res = await fetch(`${collectionPath}/${fileName}${cacheBuster}`);
                     if (res.ok) records.push(await res.json());
                 } catch (err) {
-                    console.warn(`Aviso: Falha ao procurar ${fileName}`);
+                    console.warn(`Falha ao ler o arquivo: ${fileName}`);
                 }
             }
             return records;
@@ -29,10 +24,6 @@ export const DatabaseService = {
             throw error;
         }
     },
-
-    /**
-     * Salva o registro (Atua exportando o arquivo JSON).
-     */
     saveRecord(data, filename) {
         exportJson(data, filename);
     }
