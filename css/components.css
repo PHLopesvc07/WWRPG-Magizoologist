@@ -29,3 +29,17 @@ label { margin-bottom: 5px; font-size: 0.9rem; font-weight: bold; letter-spacing
 .filter-details summary:hover { color: var(--ink); }
 .filter-details label { display: block; font-size: 0.85rem; font-weight: normal; margin: 5px 0 5px 15px; cursor: pointer; }
 .filter-details input[type="checkbox"] { accent-color: var(--magic-gold); margin-right: 5px; }
+
+/* Tabela de efeitos (Dano / Defesa / Cura) */
+.spell-effects-table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+.spell-effects-table th { text-align:left; padding:6px 8px; border-bottom:1px solid var(--border-color); color:var(--magic-gold); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px; }
+.spell-effects-table td { padding:7px 8px; border-bottom:1px solid var(--border-color); vertical-align:middle; }
+.spell-effects-table tr:last-child td { border-bottom:none; }
+
+/* Grid 2×2 da tabela de dados de teste */
+.dice-result-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.dice-result-box { padding:8px 10px; border-radius:3px; text-align:center; font-size:0.82rem; border:1px solid var(--border-color); line-height:1.5; }
+.dice-result-box.disaster { background:rgba(139,26,26,0.2);  border-color:#8b1a1a; color:#e57373; }
+.dice-result-box.fail     { background:rgba(70,70,70,0.2);   border-color:#555;    color:#aaa;    }
+.dice-result-box.hit      { background:rgba(26,74,139,0.2);  border-color:#1a4a8b; color:#64b5f6; }
+.dice-result-box.crit     { background:rgba(180,140,0,0.2);  border-color:var(--magic-gold); color:var(--magic-gold); }

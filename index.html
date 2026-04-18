@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="./css/components.css">
     <script type="module" src="./js/main.js" defer></script>
 </head>
+
 <body>
 
     <header>
@@ -27,10 +29,10 @@
     <main>
         <section id="tab-register" class="tab-content active">
             <form id="creature-form">
-                
+
                 <div class="bureaucracy-box">
                     <h2>Dados de Identificação</h2>
-                    
+
                     <div class="form-group full-width" style="margin-bottom: 15px;">
                         <label>Fotografia da Criatura</label>
                         <div class="photo-upload-container">
@@ -55,7 +57,7 @@
                             <label>Peso Adulto (kg)</label>
                             <input type="text" id="c-weight" class="ink-input" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label>Classif. M.M.</label>
                             <select id="c-class" class="ink-select" required>
@@ -67,7 +69,7 @@
                                 <option value="XXXXX">XXXXX</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
                             <label>Licença Necessária</label>
                             <select id="c-license" class="ink-select">
@@ -136,7 +138,7 @@
                             <label>Vitalidade</label>
                             <input type="number" id="attr-vitalidade" class="ink-input" value="0" min="0">
                         </div>
-                        
+
                         <div class="form-group attr-dynamic" id="wrap-instinto" style="display: none;">
                             <label>Instinto</label>
                             <input type="number" id="attr-instinto" class="ink-input" value="0" min="0">
@@ -157,46 +159,51 @@
                 </div>
 
                 </div>
-            </div>
-
-            <div class="bureaucracy-box">
-                <h2>Prontuário Médico (Injúrias Base)</h2>
-                <div class="form-grid" style="grid-template-columns: 1fr; gap: 15px;">
-                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                        <label style="width: 140px;">Leve (Atual/Máx):</label>
-                        <input type="number" id="c-inj-leve-curr" class="ink-input short-input" value="0" min="0"> /
-                        <input type="number" id="c-inj-leve-max" class="ink-input short-input" value="0" min="0">
-                    </div>
-                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                        <label style="width: 140px;">Média (Atual/Máx):</label>
-                        <input type="number" id="c-inj-media-curr" class="ink-input short-input" value="0" min="0"> /
-                        <input type="number" id="c-inj-media-max" class="ink-input short-input" value="0" min="0">
-                    </div>
-                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                        <label style="width: 140px;">Pesada (Atual/Máx):</label>
-                        <input type="number" id="c-inj-pesada-curr" class="ink-input short-input" value="0" min="0"> /
-                        <input type="number" id="c-inj-pesada-max" class="ink-input short-input" value="0" min="0">
-                    </div>
-                    
-                    <div id="custom-injuries-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 5px;"></div>
-                    <button type="button" id="btn-add-injury" class="btn-teal" style="align-self: flex-start; font-size: 0.85rem;">+ Adicionar Condição Especial</button>
                 </div>
-            </div>
-            <div style="text-align: right; margin-top: 20px;">
-                <button type="submit" class="btn-gold">Carimbar e Salvar Arquivo</button>
-            </div>
-        </form>
-    </section>
+
+                <div class="bureaucracy-box">
+                    <h2>Prontuário Médico (Injúrias Base)</h2>
+                    <div class="form-grid" style="grid-template-columns: 1fr; gap: 15px;">
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <label style="width: 140px;">Leve (Atual/Máx):</label>
+                            <input type="number" id="c-inj-leve-curr" class="ink-input short-input" value="0" min="0"> /
+                            <input type="number" id="c-inj-leve-max" class="ink-input short-input" value="0" min="0">
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <label style="width: 140px;">Média (Atual/Máx):</label>
+                            <input type="number" id="c-inj-media-curr" class="ink-input short-input" value="0" min="0">
+                            /
+                            <input type="number" id="c-inj-media-max" class="ink-input short-input" value="0" min="0">
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <label style="width: 140px;">Pesada (Atual/Máx):</label>
+                            <input type="number" id="c-inj-pesada-curr" class="ink-input short-input" value="0" min="0">
+                            /
+                            <input type="number" id="c-inj-pesada-max" class="ink-input short-input" value="0" min="0">
+                        </div>
+
+                        <div id="custom-injuries-container"
+                            style="display: flex; flex-direction: column; gap: 10px; margin-top: 5px;"></div>
+                        <button type="button" id="btn-add-injury" class="btn-teal"
+                            style="align-self: flex-start; font-size: 0.85rem;">+ Adicionar Condição Especial</button>
+                    </div>
+                </div>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button type="submit" class="btn-gold">Carimbar e Salvar Arquivo</button>
+                </div>
+            </form>
+        </section>
 
         <section id="tab-archive" class="tab-content">
             <div class="bureaucracy-box">
                 <div class="archive-grid">
                     <div style="display: flex; flex-direction: column; gap: 15px;">
                         <h2>Índice Registrado</h2>
-                        
+
                         <div class="filter-panel bureaucracy-box" style="padding: 10px; margin: 0; box-shadow: none;">
-                            <h3 style="margin-top:0; font-size: 1rem; color: var(--magic-gold);">Filtros de Pesquisa</h3>
-                            
+                            <h3 style="margin-top:0; font-size: 1rem; color: var(--magic-gold);">Filtros de Pesquisa
+                            </h3>
+
                             <div class="form-group" style="margin-bottom: 15px;">
                                 <label>Ordenação Alfabética</label>
                                 <select id="sort-order" class="ink-select">
@@ -225,27 +232,31 @@
                             <details class="filter-details">
                                 <summary>Locomoção</summary>
                                 <label><input type="checkbox" value="aéreos" data-filter="locomocao"> Aéreos</label>
-                                <label><input type="checkbox" value="terrestres" data-filter="locomocao"> Terrestres</label>
-                                <label><input type="checkbox" value="aquáticos" data-filter="locomocao"> Aquáticos</label>
+                                <label><input type="checkbox" value="terrestres" data-filter="locomocao">
+                                    Terrestres</label>
+                                <label><input type="checkbox" value="aquáticos" data-filter="locomocao">
+                                    Aquáticos</label>
                                 <label><input type="checkbox" value="aquaéros" data-filter="locomocao"> Aquaéros</label>
                             </details>
 
                             <details class="filter-details">
                                 <summary>Origem</summary>
                                 <label><input type="checkbox" value="Natural" data-filter="origem"> Natural</label>
-                                <label><input type="checkbox" value="Artificial" data-filter="origem"> Artificial</label>
+                                <label><input type="checkbox" value="Artificial" data-filter="origem">
+                                    Artificial</label>
                             </details>
 
                             <details class="filter-details">
                                 <summary>Interação</summary>
                                 <label><input type="checkbox" value="pacifico" data-filter="interacao"> Pacífico</label>
-                                <label><input type="checkbox" value="agressivo" data-filter="interacao"> Agressivo</label>
+                                <label><input type="checkbox" value="agressivo" data-filter="interacao">
+                                    Agressivo</label>
                             </details>
                         </div>
 
                         <ul class="creature-list" id="archive-list"></ul>
                     </div>
-                    
+
                     <div class="creature-details" id="creature-viewer">
                         <div style="text-align: center; color: var(--border-color); margin-top: 50px;">
                             Selecione uma criatura no índice para visualizar o registro completo.
@@ -288,6 +299,15 @@
                                 <option value="7">Nível 7</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>Tipo de Efeito</label>
+                            <select id="s-tipo" class="ink-select" required>
+                                <option value="Utilitário" selected>Utilitário (sem combate)</option>
+                                <option value="Dano">Dano</option>
+                                <option value="Defesa">Defesa</option>
+                                <option value="Cura">Cura</option>
+                            </select>
+                        </div>
                         <div class="form-group full-width">
                             <label>Descrição do Efeito Mágico</label>
                             <textarea id="s-desc" class="ink-textarea" required></textarea>
@@ -308,13 +328,15 @@
 
                         <div class="list-controls" style="display: flex; gap: 10px; margin-bottom: 15px;">
                             <button id="btn-create-list" class="btn-teal">Criar Lista Múltipla</button>
-                            <button id="btn-save-list" class="btn-gold" style="display: none;">Salvar Lista (.json)</button>
+                            <button id="btn-save-list" class="btn-gold" style="display: none;">Salvar Lista
+                                (.json)</button>
                             <button id="btn-cancel-list" class="btn-danger" style="display: none;">Cancelar</button>
                         </div>
-                        
+
                         <div class="filter-panel bureaucracy-box" style="padding: 10px; margin: 0; box-shadow: none;">
-                            <h3 style="margin-top:0; font-size: 1rem; color: var(--magic-gold);">Filtros de Pesquisa</h3>
-                            
+                            <h3 style="margin-top:0; font-size: 1rem; color: var(--magic-gold);">Filtros de Pesquisa
+                            </h3>
+
                             <div class="form-group" style="margin-bottom: 15px;">
                                 <label>Ordenação Alfabética</label>
                                 <select id="sort-order-spell" class="ink-select">
@@ -325,12 +347,15 @@
 
                             <details class="filter-details">
                                 <summary>Categoria</summary>
-                                <label><input type="checkbox" value="Transfiguração" data-filter-spell="cat"> Transfiguração</label>
+                                <label><input type="checkbox" value="Transfiguração" data-filter-spell="cat">
+                                    Transfiguração</label>
                                 <label><input type="checkbox" value="Feitiço" data-filter-spell="cat"> Feitiço</label>
                                 <label><input type="checkbox" value="Azaração" data-filter-spell="cat"> Azaração</label>
-                                <label><input type="checkbox" value="Maldição Menor" data-filter-spell="cat"> Maldição Menor</label>
+                                <label><input type="checkbox" value="Maldição Menor" data-filter-spell="cat"> Maldição
+                                    Menor</label>
                                 <label><input type="checkbox" value="Maldição" data-filter-spell="cat"> Maldição</label>
-                                <label><input type="checkbox" value="Contra-feitiço" data-filter-spell="cat"> Contra-feitiço</label>
+                                <label><input type="checkbox" value="Contra-feitiço" data-filter-spell="cat">
+                                    Contra-feitiço</label>
                                 <label><input type="checkbox" value="Cura" data-filter-spell="cat"> Cura</label>
                             </details>
 
@@ -348,7 +373,7 @@
 
                         <ul class="creature-list" id="archive-spell-list"></ul>
                     </div>
-                    
+
                     <div class="creature-details" id="spell-viewer">
                         <div style="text-align: center; color: var(--border-color); margin-top: 50px;">
                             Selecione um feitiço no índice para visualizar o registro completo.
@@ -361,4 +386,5 @@
 
     </main>
 </body>
+
 </html>
