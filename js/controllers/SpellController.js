@@ -36,6 +36,7 @@ function buildEffectsRows(tipo, fx) {
     'Dano': { key: 'dmg', label: '⚔︎ Dano', color: '#c0392b' },
     'Defesa': { key: 'def', label: '⛊ Defesa', color: '#2980b9' },
     'Cura': { key: 'cure', label: '❤︎ Cura', color: '#27ae60' },
+
   };
   const show = tipo ? [tipo] : ['Dano', 'Defesa', 'Cura'];
   return show.map(t => {
@@ -161,7 +162,7 @@ export class SpellController {
         <td><strong>${s.name}</strong></td>
         <td>${s.cat}</td>
         <td>${s.lvl}</td>
-        <td>${s.tipo}</td>
+        <td>${s.tipo ?? '—'}</td>
       </tr>`).join('');
 
     tbody.querySelectorAll('.btn-remove-bulk').forEach(btn => {
