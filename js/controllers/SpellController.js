@@ -33,9 +33,9 @@ function inferTipo(cat) {
 // Monta as linhas da tabela de efeitos
 function buildEffectsRows(tipo, fx) {
   const cfg = {
-    'Dano':   { key:'dmg',  label:'⚔️ Dano',  color:'#c0392b' },
-    'Defesa': { key:'def',  label:'🛡️ Defesa', color:'#2980b9' },
-    'Cura':   { key:'cure', label:'💊 Cura',   color:'#27ae60' },
+    'Dano': { key: 'dmg', label: '⚔︎ Dano', color: '#c0392b' },
+    'Defesa': { key: 'def', label: '⛊ Defesa', color: '#2980b9' },
+    'Cura': { key: 'cure', label: '❤︎ Cura', color: '#27ae60' },
   };
   const show = tipo ? [tipo] : ['Dano', 'Defesa', 'Cura'];
   return show.map(t => {
@@ -336,16 +336,16 @@ export class SpellController {
         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
           <span class="attr-badge">${s.cat}</span>
           <span class="attr-badge" style="border-color:var(--magic-gold);">Nível ${s.lvl}</span>
-          <span class="attr-badge">🎲 ${ld.dice}</span>
-          <span class="attr-badge">⚡ ${ld.actions}</span>
-          <span class="attr-badge">✨ ${conjAttr}</span>
+          <span class="attr-badge">⚅ ${ld.dice}</span>
+          <span class="attr-badge">ϟ ${ld.actions}</span>
+          <span class="attr-badge">★ ${conjAttr}</span>
           ${s.tipo ? `<span class="attr-badge" style="border-color:#555;color:#aaa;">${s.tipo}</span>` : ''}
         </div>
 
         <div class="bureaucracy-box" style="padding:10px;margin-bottom:15px;">
           <h3 style="margin-top:0;font-size:1rem;color:var(--magic-gold);">Tabela de Teste — ${ld.dice}</h3>
           <div class="dice-result-grid">
-            <div class="dice-result-box disaster">💥 Desastre<br><strong>${ld.ranges.disaster}</strong></div>
+            <div class="dice-result-box disaster">☠︎︎ Desastre<br><strong>${ld.ranges.disaster}</strong></div>
             <div class="dice-result-box fail">✗ Falha<br><strong>${ld.ranges.fail}</strong></div>
             <div class="dice-result-box hit">✓ Acerto<br><strong>${ld.ranges.hit}</strong></div>
             <div class="dice-result-box crit">★ Crítico<br><strong>${ld.ranges.crit}</strong></div>
