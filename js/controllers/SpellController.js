@@ -1,3 +1,4 @@
+
 import { DatabaseService } from '../services/database.js';
 
 // ─── Tabelas derivadas do sistema de regras ────────────────────────────────
@@ -13,29 +14,27 @@ const CONJ_ATTR = {
 };
 
 const LEVEL_DATA = {
-  1: { dice:'d20', actions:'2 ações',               ranges:{disaster:'1',    fail:'2–5',   hit:'6–15',  crit:'16–20'}, fx:{dmg:{hit:'1L / 1C',             crit:'2L / 1C'},            def:{hit:'Bloqueia 1L / 0C',        crit:'Bloqueia 2L / 1C'},            cure:{hit:'1L',  crit:'2L'}}},
-  2: { dice:'d20', actions:'2 ações',               ranges:{disaster:'1',    fail:'2–5',   hit:'6–15',  crit:'16–20'}, fx:{dmg:{hit:'1L / 1C',             crit:'2L / 1C'},            def:{hit:'Bloqueia 1L / 0C',        crit:'Bloqueia 2L / 1C'},            cure:{hit:'1L',  crit:'2L'}}},
-  3: { dice:'d30', actions:'3 ações',               ranges:{disaster:'1–5',  fail:'6–10',  hit:'11–25', crit:'26–30'}, fx:{dmg:{hit:'2L, 1M / 1C',         crit:'3L, 2M / 1C'},        def:{hit:'Bloqueia 2L, 1M / 1C',    crit:'Bloqueia 3L, 2M / 1C'},        cure:{hit:'3L',  crit:'6L'}}},
-  4: { dice:'d30', actions:'3 ações',               ranges:{disaster:'1–5',  fail:'6–10',  hit:'11–25', crit:'26–30'}, fx:{dmg:{hit:'2L, 1M / 1C',         crit:'3L, 2M / 1C'},        def:{hit:'Bloqueia 2L, 1M / 1C',    crit:'Bloqueia 3L, 2M / 1C'},        cure:{hit:'3L',  crit:'6L'}}},
-  5: { dice:'d40', actions:'4 ações',               ranges:{disaster:'1–10', fail:'11–20', hit:'21–35', crit:'36–40'}, fx:{dmg:{hit:'3L, 2M, 1P / 1C',     crit:'4L, 3M, 2P / 2C'},    def:{hit:'Bloqueia 3L, 2M, 1P / 1C',crit:'Bloqueia 4L, 3M, 2P / 2C'},    cure:{hit:'9L',  crit:'12L'}}},
-  6: { dice:'d40', actions:'Todas as ações (5)',     ranges:{disaster:'1–10', fail:'11–20', hit:'21–35', crit:'36–40'}, fx:{dmg:{hit:'4L, 3M, 2P / 2C',     crit:'5L, 4M, 3P / 3C'},    def:{hit:'Bloqueia 4L, 4M, 2P / 2C',crit:'Bloqueia 5L, 5M, 3P / 3C'},    cure:{hit:'15L', crit:'18L'}}},
-  7: { dice:'d50', actions:'Rodada de preparação',  ranges:{disaster:'1–20', fail:'21–35', hit:'36–45', crit:'46–50'}, fx:{dmg:{hit:'4L, 3M, 3P / 2C',     crit:'Morte Instantânea / 5L, 5M, 5P / 3C'}, def:{hit:'Bloqueia 2L, 2M, 2P / 2C', crit:'Absoluta / 5L, 5M, 5P / 3C'}, cure:{hit:'24L', crit:'27L — Cura Completa'}}},
+  1: { dice:'d20', actions:'2 ações',              ranges:{disaster:'1',    fail:'2–5',   hit:'6–15',  crit:'16–20'}, fx:{dmg:{hit:'1L / 1C',             crit:'2L / 1C'},            def:{hit:'Bloqueia 1L / 0C',        crit:'Bloqueia 2L / 1C'},            cure:{hit:'1L',  crit:'2L'}}},
+  2: { dice:'d20', actions:'2 ações',              ranges:{disaster:'1',    fail:'2–5',   hit:'6–15',  crit:'16–20'}, fx:{dmg:{hit:'1L / 1C',             crit:'2L / 1C'},            def:{hit:'Bloqueia 1L / 0C',        crit:'Bloqueia 2L / 1C'},            cure:{hit:'1L',  crit:'2L'}}},
+  3: { dice:'d30', actions:'3 ações',              ranges:{disaster:'1–5',  fail:'6–10',  hit:'11–25', crit:'26–30'}, fx:{dmg:{hit:'2L, 1M / 1C',         crit:'3L, 2M / 1C'},        def:{hit:'Bloqueia 2L, 1M / 1C',    crit:'Bloqueia 3L, 2M / 1C'},        cure:{hit:'3L',  crit:'6L'}}},
+  4: { dice:'d30', actions:'3 ações',              ranges:{disaster:'1–5',  fail:'6–10',  hit:'11–25', crit:'26–30'}, fx:{dmg:{hit:'2L, 1M / 1C',         crit:'3L, 2M / 1C'},        def:{hit:'Bloqueia 2L, 1M / 1C',    crit:'Bloqueia 3L, 2M / 1C'},        cure:{hit:'3L',  crit:'6L'}}},
+  5: { dice:'d40', actions:'4 ações',              ranges:{disaster:'1–10', fail:'11–20', hit:'21–35', crit:'36–40'}, fx:{dmg:{hit:'3L, 2M, 1P / 1C',     crit:'4L, 3M, 2P / 2C'},    def:{hit:'Bloqueia 3L, 2M, 1P / 1C',crit:'Bloqueia 4L, 3M, 2P / 2C'},    cure:{hit:'9L',  crit:'12L'}}},
+  6: { dice:'d40', actions:'Todas as ações (5)',    ranges:{disaster:'1–10', fail:'11–20', hit:'21–35', crit:'36–40'}, fx:{dmg:{hit:'4L, 3M, 2P / 2C',     crit:'5L, 4M, 3P / 3C'},    def:{hit:'Bloqueia 4L, 4M, 2P / 2C',crit:'Bloqueia 5L, 5M, 3P / 3C'},    cure:{hit:'15L', crit:'18L'}}},
+  7: { dice:'d50', actions:'Rodada de preparação', ranges:{disaster:'1–20', fail:'21–35', hit:'36–45', crit:'46–50'}, fx:{dmg:{hit:'4L, 3M, 3P / 2C',     crit:'Morte Instantânea / 5L, 5M, 5P / 3C'}, def:{hit:'Bloqueia 2L, 2M, 2P / 2C', crit:'Absoluta / 5L, 5M, 5P / 3C'}, cure:{hit:'24L', crit:'27L — Cura Completa'}}},
 };
 
-// Inferência de tipo para feitiços antigos sem o campo
 function inferTipo(cat) {
   if (cat === 'Cura')           return 'Cura';
   if (['Maldição', 'Maldição Menor', 'Azaração'].includes(cat)) return 'Dano';
   if (cat === 'Contra-feitiço') return 'Defesa';
-  return null; // ambíguo → exibe todas as linhas
+  return null;
 }
 
-// Monta as linhas da tabela de efeitos
 function buildEffectsRows(tipo, fx) {
   const cfg = {
-    'Dano': { key: 'dmg', label: '⚔︎ Dano', color: '#c0392b' },
-    'Defesa': { key: 'def', label: '⛊ Defesa', color: '#2980b9' },
-    'Cura': { key: 'cure', label: '❤︎ Cura', color: '#27ae60' },
+    'Dano':   { key: 'dmg',  label: '⚔︎ Dano',  color: '#c0392b' },
+    'Defesa': { key: 'def',  label: '⛊ Defesa', color: '#2980b9' },
+    'Cura':   { key: 'cure', label: '❤︎ Cura',  color: '#27ae60' },
   };
   const show = tipo ? [tipo] : ['Dano', 'Defesa', 'Cura'];
   return show.map(t => {
@@ -68,6 +67,7 @@ export class SpellController {
     document.getElementById('btn-save-list')?.addEventListener('click',  () => this.exportSpellList());
 
     document.getElementById('sort-order-spell')?.addEventListener('change', () => this.applyFiltersAndRender());
+    document.getElementById('search-spell')?.addEventListener('input',     () => this.applyFiltersAndRender());
     document.querySelectorAll('.filter-panel input[data-filter-spell]')
       .forEach(cb => cb.addEventListener('change', () => this.applyFiltersAndRender()));
 
@@ -110,11 +110,11 @@ export class SpellController {
   }
 
   parseBulkJson() {
-    const input   = document.getElementById('bulk-json-input').value.trim();
-    const errorEl = document.getElementById('bulk-error');
+    const input     = document.getElementById('bulk-json-input').value.trim();
+    const errorEl   = document.getElementById('bulk-error');
     const previewEl = document.getElementById('bulk-preview');
-    errorEl.style.display   = 'none';
-    previewEl.style.display  = 'none';
+    errorEl.style.display  = 'none';
+    previewEl.style.display = 'none';
     document.getElementById('btn-execute-bulk').style.display = 'none';
     document.getElementById('btn-cancel-bulk').style.display  = 'none';
 
@@ -122,8 +122,8 @@ export class SpellController {
     try {
       parsed = JSON.parse(input);
     } catch (e) {
-      errorEl.textContent    = `JSON inválido: ${e.message}`;
-      errorEl.style.display  = 'block';
+      errorEl.textContent   = `JSON inválido: ${e.message}`;
+      errorEl.style.display = 'block';
       return;
     }
 
@@ -167,34 +167,29 @@ export class SpellController {
     tbody.querySelectorAll('.btn-remove-bulk').forEach(btn => {
       btn.addEventListener('click', () => {
         btn.closest('tr').remove();
-        document.getElementById('bulk-count').textContent =
-          tbody.querySelectorAll('tr').length;
+        document.getElementById('bulk-count').textContent = tbody.querySelectorAll('tr').length;
       });
     });
 
-    document.getElementById('bulk-count').textContent      = spells.length;
-    document.getElementById('bulk-preview').style.display  = 'block';
+    document.getElementById('bulk-count').textContent         = spells.length;
+    document.getElementById('bulk-preview').style.display     = 'block';
     document.getElementById('btn-execute-bulk').style.display = 'inline-block';
     document.getElementById('btn-cancel-bulk').style.display  = 'inline-block';
   }
 
   executeBulkImport() {
-    const tbody = document.getElementById('bulk-table-body');
-    const remaining = new Set(
-      [...tbody.querySelectorAll('tr[data-spell-name]')].map(r => r.dataset.spellName)
-    );
-    const toImport = this.bulkSpells.filter(s => remaining.has(s.name));
+    const tbody     = document.getElementById('bulk-table-body');
+    const remaining = new Set([...tbody.querySelectorAll('tr[data-spell-name]')].map(r => r.dataset.spellName));
+    const toImport  = this.bulkSpells.filter(s => remaining.has(s.name));
 
     if (!toImport.length) return alert('Nenhum feitiço para importar.');
 
     const safe = n => n.replace(/[^a-z0-9_]/gi, '_').toLowerCase();
 
-    // Download cada feitiço com delay escalonado
     toImport.forEach((spell, i) => {
       setTimeout(() => DatabaseService.saveRecord(spell, `feitico_${spell.name}`), i * 300);
     });
 
-    // Monta o indice combinando existentes + novos (sem duplicatas)
     const existingFiles = this.archive.map(s => `feitico_${safe(s.name)}.json`);
     const newFiles      = toImport.map(s => `feitico_${safe(s.name)}.json`);
     const merged        = [...new Set([...existingFiles, ...newFiles])];
@@ -220,8 +215,6 @@ export class SpellController {
     document.getElementById('btn-cancel-bulk').style.display  = 'none';
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
-
   exportSpellList() {
     if (this.selectedSpells.size === 0) return alert('Nenhum feitiço foi selecionado para o manuscrito.');
     const records = this.archive.filter(s => this.selectedSpells.has(s.name));
@@ -245,12 +238,19 @@ export class SpellController {
     if (!listEl) return;
     listEl.innerHTML = '';
 
+    const search = (document.getElementById('search-spell')?.value || '').toLowerCase().trim();
+
     const activeFilters = { cat: [], lvl: [] };
     document.querySelectorAll('.filter-panel input[data-filter-spell]:checked').forEach(cb => {
       activeFilters[cb.getAttribute('data-filter-spell')].push(cb.value);
     });
 
     let filtered = this.archive.filter(spell => {
+      if (search) {
+        const name = (spell.name || '').toLowerCase();
+        const desc = (spell.desc || '').toLowerCase();
+        if (!name.includes(search) && !desc.includes(search)) return false;
+      }
       for (const key in activeFilters) {
         if (activeFilters[key].length > 0 && !activeFilters[key].includes(String(spell[key]))) return false;
       }
@@ -302,19 +302,18 @@ export class SpellController {
   }
 
   renderDetails(s) {
-    const viewer = document.getElementById('spell-viewer');
-    const lvl = parseInt(s.lvl) || 1;
-    const ld  = LEVEL_DATA[lvl] || LEVEL_DATA[1];
+    const viewer   = document.getElementById('spell-viewer');
+    const lvl      = parseInt(s.lvl) || 1;
+    const ld       = LEVEL_DATA[lvl] || LEVEL_DATA[1];
     const conjAttr = CONJ_ATTR[s.cat] || 'Sabedoria';
 
-    // Determina o tipo de efeito a exibir
     let tipoEfeito;
     if (s.tipo && s.tipo !== 'Utilitário' && s.tipo !== 'N/A') {
-      tipoEfeito = s.tipo;             // tipo explícito no JSON
+      tipoEfeito = s.tipo;
     } else if (!s.tipo) {
-      tipoEfeito = inferTipo(s.cat);   // inferência por categoria (null = exibe tudo)
+      tipoEfeito = inferTipo(s.cat);
     } else {
-      tipoEfeito = 'skip';             // Utilitário → sem tabela
+      tipoEfeito = 'skip';
     }
 
     const efeitosHtml = tipoEfeito !== 'skip' ? `
@@ -332,7 +331,6 @@ export class SpellController {
     viewer.innerHTML = `
       <div>
         <h2 style="margin:0 0 12px 0;color:var(--magic-gold);">${s.name}</h2>
-
         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
           <span class="attr-badge">${s.cat}</span>
           <span class="attr-badge" style="border-color:var(--magic-gold);">Nível ${s.lvl}</span>
@@ -341,7 +339,6 @@ export class SpellController {
           <span class="attr-badge">★ ${conjAttr}</span>
           ${s.tipo ? `<span class="attr-badge" style="border-color:#555;color:#aaa;">${s.tipo}</span>` : ''}
         </div>
-
         <div class="bureaucracy-box" style="padding:10px;margin-bottom:15px;">
           <h3 style="margin-top:0;font-size:1rem;color:var(--magic-gold);">Tabela de Teste — ${ld.dice}</h3>
           <div class="dice-result-grid">
@@ -351,9 +348,7 @@ export class SpellController {
             <div class="dice-result-box crit">★ Crítico<br><strong>${ld.ranges.crit}</strong></div>
           </div>
         </div>
-
         ${efeitosHtml}
-
         <div class="bureaucracy-box" style="padding:15px;">
           <h3 style="margin-top:0;font-size:1rem;color:var(--magic-gold);">Descrição e Efeitos</h3>
           <p style="line-height:1.5;white-space:pre-wrap;font-size:0.95rem;margin:0;">${s.desc}</p>

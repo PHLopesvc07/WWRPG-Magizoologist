@@ -1,3 +1,4 @@
+
 import { fileToBase64 } from '../utils/helpers.js';
 import { DatabaseService } from '../services/database.js';
 
@@ -39,6 +40,7 @@ export class CreatureController {
         if (form) form.addEventListener('submit', (e) => this.saveCreature(e, form));
 
         document.getElementById('sort-order')?.addEventListener('change', () => this.applyFiltersAndRender());
+        document.getElementById('search-creature')?.addEventListener('input', () => this.applyFiltersAndRender());
         document.querySelectorAll('.filter-panel input[type="checkbox"]:not([data-filter-spell])')
             .forEach(cb => cb.addEventListener('change', () => this.applyFiltersAndRender()));
     }
@@ -108,8 +110,8 @@ export class CreatureController {
                 sabedoria: parseInt(document.getElementById('attr-sabedoria').value) || 0
             },
             injuries: {
-                leve: { curr: document.getElementById('c-inj-leve-curr')?.value || 0, max: document.getElementById('c-inj-leve-max')?.value || 0 },
-                media: { curr: document.getElementById('c-inj-media-curr')?.value || 0, max: document.getElementById('c-inj-media-max')?.value || 0 },
+                leve:   { curr: document.getElementById('c-inj-leve-curr')?.value   || 0, max: document.getElementById('c-inj-leve-max')?.value   || 0 },
+                media:  { curr: document.getElementById('c-inj-media-curr')?.value  || 0, max: document.getElementById('c-inj-media-max')?.value  || 0 },
                 pesada: { curr: document.getElementById('c-inj-pesada-curr')?.value || 0, max: document.getElementById('c-inj-pesada-max')?.value || 0 },
                 custom: customInjuries
             }
@@ -121,14 +123,13 @@ export class CreatureController {
         form.reset();
         document.getElementById('photo-preview').src = '';
         this.currentImageBase64 = '';
-        document.getElementById('custom-injuries-container').innerHTML = ''; 
-        document.getElementById('c-type').dispatchEvent(new Event('change')); 
+        document.getElementById('custom-injuries-container').innerHTML = '';
+        document.getElementById('c-type').dispatchEvent(new Event('change'));
     }
 
     async loadArchive() {
         const listEl = document.getElementById('archive-list');
         listEl.innerHTML = '<li style="color: var(--magic-gold); text-align: center; padding: 15px;">A consultar os arquivos restritos...</li>';
-        
         try {
             this.archive = await DatabaseService.fetchCollection('./dados', 'indice.json');
             this.applyFiltersAndRender();
@@ -142,22 +143,25 @@ export class CreatureController {
         if (!listEl) return;
         listEl.innerHTML = '';
 
+        const search = (document.getElementById('search-creature')?.value || '').toLowerCase().trim();
+
         const activeFilters = { tipo: [], classificacao: [], locomocao: [], origem: [], interacao: [] };
         document.querySelectorAll('.filter-panel input[type="checkbox"]:checked:not([data-filter-spell])').forEach(cb => {
             activeFilters[cb.getAttribute('data-filter')].push(cb.value);
         });
 
         let filtered = this.archive.filter(creature => {
-            let isValid = true;
+            if (search) {
+                const nome = (creature.nome || '').toLowerCase();
+                const desc = (creature.descricao || '').toLowerCase();
+                if (!nome.includes(search) && !desc.includes(search)) return false;
+            }
             for (const category in activeFilters) {
                 if (activeFilters[category].length > 0) {
-                    const creatureAttr = String(creature[category]); 
-                    if (!activeFilters[category].includes(creatureAttr)) {
-                        isValid = false; break;
-                    }
+                    if (!activeFilters[category].includes(String(creature[category]))) return false;
                 }
             }
-            return isValid;
+            return true;
         });
 
         const sortOrder = document.getElementById('sort-order')?.value || 'AZ';
@@ -171,7 +175,7 @@ export class CreatureController {
         filtered.forEach((creature) => {
             const li = document.createElement('li');
             li.className = 'creature-item';
-            
+
             const span = document.createElement('span');
             span.className = 'creature-item-title';
             span.textContent = `${creature.nome} (${creature.classificacao})`;
@@ -206,27 +210,25 @@ export class CreatureController {
         let injuriesHtml = '';
         if (c.injuries) {
             let customHtml = '';
-            if (c.injuries.custom && c.injuries.custom.length > 0) {
+            if (c.injuries.custom?.length > 0) {
                 customHtml = '<h4 style="margin: 10px 0 5px 0; font-size: 0.9rem; color: var(--magic-gold);">Condições Especiais:</h4>';
                 c.injuries.custom.forEach(inj => {
-                    if(inj.name) customHtml += `<p style="margin: 3px 0;"><strong>${inj.name}:</strong> ${inj.curr} / ${inj.max}</p>`;
+                    if (inj.name) customHtml += `<p style="margin: 3px 0;"><strong>${inj.name}:</strong> ${inj.curr} / ${inj.max}</p>`;
                 });
             }
-
             injuriesHtml = `
                 <div class="bureaucracy-box" style="padding: 10px; margin-bottom: 15px;">
                     <h3 style="margin-top: 0; font-size: 1rem;">Prontuário Médico</h3>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <span class="attr-badge" style="background: rgba(183, 28, 28, 0.1); border-color: #b71c1c;">Leve: ${c.injuries.leve?.curr || 0}/${c.injuries.leve?.max || 0}</span>
-                        <span class="attr-badge" style="background: rgba(183, 28, 28, 0.1); border-color: #b71c1c;">Média: ${c.injuries.media?.curr || 0}/${c.injuries.media?.max || 0}</span>
-                        <span class="attr-badge" style="background: rgba(183, 28, 28, 0.1); border-color: #b71c1c;">Pesada: ${c.injuries.pesada?.curr || 0}/${c.injuries.pesada?.max || 0}</span>
+                        <span class="attr-badge" style="background: rgba(183,28,28,0.1); border-color: #b71c1c;">Leve: ${c.injuries.leve?.curr || 0}/${c.injuries.leve?.max || 0}</span>
+                        <span class="attr-badge" style="background: rgba(183,28,28,0.1); border-color: #b71c1c;">Média: ${c.injuries.media?.curr || 0}/${c.injuries.media?.max || 0}</span>
+                        <span class="attr-badge" style="background: rgba(183,28,28,0.1); border-color: #b71c1c;">Pesada: ${c.injuries.pesada?.curr || 0}/${c.injuries.pesada?.max || 0}</span>
                     </div>
                     ${customHtml}
-                </div>
-            `;
+                </div>`;
         }
 
-        const photoSrc = c.fotoBase64 ? c.fotoBase64 : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+        const photoSrc = c.fotoBase64 || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
         viewer.innerHTML = `
             <div class="details-header">
@@ -246,7 +248,7 @@ export class CreatureController {
                 <h3 style="margin-top: 0; font-size: 1rem;">Atributos Mágicos / Físicos</h3>
                 ${attrHtml}
             </div>
-            ${injuriesHtml} 
+            ${injuriesHtml}
             <div>
                 <h3 style="margin-top: 0; font-size: 1rem; color: var(--magic-gold);">Descrição e Notas</h3>
                 <p style="line-height: 1.5; white-space: pre-wrap; font-size: 0.95rem;">${c.descricao}</p>
