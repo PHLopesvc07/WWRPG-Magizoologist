@@ -318,6 +318,49 @@
                     <button type="submit" class="btn-gold">Carimbar e Salvar Feitiço</button>
                 </div>
             </form>
+            <div class="bureaucracy-box" style="margin-top:20px;">
+                <h2>Importação em Massa</h2>
+                <p style="font-size:0.88rem;color:#888;margin-top:0;">
+                    Cole um array JSON com múltiplos feitiços. Campos obrigatórios:
+                    <code>name</code>, <code>cat</code>, <code>lvl</code>, <code>desc</code>.
+                    O campo <code>tipo</code> é opcional (padrão: Utilitário).
+                </p>
+
+                <div class="form-group" style="margin-bottom:15px;">
+                    <label>JSON de Feitiços</label>
+                    <textarea id="bulk-json-input" class="ink-textarea"
+                        style="min-height:140px;font-family:monospace;font-size:0.82rem;"
+                        placeholder='[&#10;  {"name":"Stupefy","cat":"Feitiço","lvl":"2","tipo":"Dano","desc":"Atordoa o alvo com um feixe de luz vermelha."},&#10;  {"name":"Wingardium Leviosa","cat":"Feitiço","lvl":"1","tipo":"Utilitário","desc":"Levita objetos."}&#10;]'></textarea>
+                </div>
+
+                <div style="display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap;">
+                    <button id="btn-parse-bulk" class="btn-teal">Analisar JSON</button>
+                    <button id="btn-execute-bulk" class="btn-gold" style="display:none;">Carimbar e Importar
+                        Todos</button>
+                    <button id="btn-cancel-bulk" class="btn-danger" style="display:none;">Cancelar</button>
+                </div>
+
+                <div id="bulk-error" style="display:none;color:#ff6b6b;font-size:0.88rem;
+         padding:10px;border:1px solid #ff6b6b;border-radius:3px;margin-bottom:10px;"></div>
+
+                <div id="bulk-preview" style="display:none;">
+                    <h3 style="font-size:1rem;color:var(--magic-gold);margin-top:0;">
+                        Pré-visualização — <span id="bulk-count">0</span> feitiço(s) detectado(s)
+                    </h3>
+                    <table class="spell-effects-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Nome</th>
+                                <th>Categoria</th>
+                                <th>Nível</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bulk-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
         </section>
 
         <section id="tab-archive-spell" class="tab-content">
