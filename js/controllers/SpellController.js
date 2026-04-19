@@ -3,28 +3,28 @@ import { DatabaseService } from '../services/database.js';
 // ─── Tabelas derivadas do sistema de regras ────────────────────────────────
 
 const CONJ_ATTR = {
-  'Transfiguração': 'Transfiguração (Carisma)',
-  'Charme': 'Prática (Sabedoria)',
-  'Azaração': 'DCAT (Sabedoria)',
-  'Maldição Menor': 'DCAT (Sabedoria)',
-  'Maldição': 'DCAT (Sabedoria)',
-  'Contra-feitiço': 'Prática (Sabedoria)',
-  'Cura': 'Cura (Carisma)',
+  'Transfiguração':  'Transfiguração (Carisma)',
+  'Feitiço':         'Prática (Sabedoria)',
+  'Azaração':        'DCAT (Sabedoria)',
+  'Maldição Menor':  'DCAT (Sabedoria)',
+  'Maldição':        'DCAT (Sabedoria)',
+  'Contra-feitiço':  'Prática (Sabedoria)',
+  'Cura':            'Cura (Carisma)',
 };
 
 const LEVEL_DATA = {
-  1: { dice: 'd20', actions: '2 ações', ranges: { disaster: '1', fail: '2–5', hit: '6–15', crit: '16–20' }, fx: { dmg: { hit: '1L / 1C', crit: '2L / 1C' }, def: { hit: 'Bloqueia 1L / 0C', crit: 'Bloqueia 2L / 1C' }, cure: { hit: '1L', crit: '2L' } } },
-  2: { dice: 'd20', actions: '2 ações', ranges: { disaster: '1', fail: '2–5', hit: '6–15', crit: '16–20' }, fx: { dmg: { hit: '1L / 1C', crit: '2L / 1C' }, def: { hit: 'Bloqueia 1L / 0C', crit: 'Bloqueia 2L / 1C' }, cure: { hit: '1L', crit: '2L' } } },
-  3: { dice: 'd30', actions: '3 ações', ranges: { disaster: '1–5', fail: '6–10', hit: '11–25', crit: '26–30' }, fx: { dmg: { hit: '2L, 1M / 1C', crit: '3L, 2M / 1C' }, def: { hit: 'Bloqueia 2L, 1M / 1C', crit: 'Bloqueia 3L, 2M / 1C' }, cure: { hit: '3L', crit: '6L' } } },
-  4: { dice: 'd30', actions: '3 ações', ranges: { disaster: '1–5', fail: '6–10', hit: '11–25', crit: '26–30' }, fx: { dmg: { hit: '2L, 1M / 1C', crit: '3L, 2M / 1C' }, def: { hit: 'Bloqueia 2L, 1M / 1C', crit: 'Bloqueia 3L, 2M / 1C' }, cure: { hit: '3L', crit: '6L' } } },
-  5: { dice: 'd40', actions: '4 ações', ranges: { disaster: '1–10', fail: '11–20', hit: '21–35', crit: '36–40' }, fx: { dmg: { hit: '3L, 2M, 1P / 1C', crit: '4L, 3M, 2P / 2C' }, def: { hit: 'Bloqueia 3L, 2M, 1P / 1C', crit: 'Bloqueia 4L, 3M, 2P / 2C' }, cure: { hit: '9L', crit: '12L' } } },
-  6: { dice: 'd40', actions: 'Todas as ações (5)', ranges: { disaster: '1–10', fail: '11–20', hit: '21–35', crit: '36–40' }, fx: { dmg: { hit: '4L, 3M, 2P / 2C', crit: '5L, 4M, 3P / 3C' }, def: { hit: 'Bloqueia 4L, 4M, 2P / 2C', crit: 'Bloqueia 5L, 5M, 3P / 3C' }, cure: { hit: '15L', crit: '18L' } } },
-  7: { dice: 'd50', actions: 'Rodada de preparação', ranges: { disaster: '1–20', fail: '21–35', hit: '36–45', crit: '46–50' }, fx: { dmg: { hit: '4L, 3M, 3P / 2C', crit: 'Morte Instantânea / 5L, 5M, 5P / 3C' }, def: { hit: 'Bloqueia 2L, 2M, 2P / 2C', crit: 'Absoluta / 5L, 5M, 5P / 3C' }, cure: { hit: '24L', crit: '27L — Cura Completa' } } },
+  1: { dice:'d20', actions:'2 ações',               ranges:{disaster:'1',    fail:'2–5',   hit:'6–15',  crit:'16–20'}, fx:{dmg:{hit:'1L / 1C',             crit:'2L / 1C'},            def:{hit:'Bloqueia 1L / 0C',        crit:'Bloqueia 2L / 1C'},            cure:{hit:'1L',  crit:'2L'}}},
+  2: { dice:'d20', actions:'2 ações',               ranges:{disaster:'1',    fail:'2–5',   hit:'6–15',  crit:'16–20'}, fx:{dmg:{hit:'1L / 1C',             crit:'2L / 1C'},            def:{hit:'Bloqueia 1L / 0C',        crit:'Bloqueia 2L / 1C'},            cure:{hit:'1L',  crit:'2L'}}},
+  3: { dice:'d30', actions:'3 ações',               ranges:{disaster:'1–5',  fail:'6–10',  hit:'11–25', crit:'26–30'}, fx:{dmg:{hit:'2L, 1M / 1C',         crit:'3L, 2M / 1C'},        def:{hit:'Bloqueia 2L, 1M / 1C',    crit:'Bloqueia 3L, 2M / 1C'},        cure:{hit:'3L',  crit:'6L'}}},
+  4: { dice:'d30', actions:'3 ações',               ranges:{disaster:'1–5',  fail:'6–10',  hit:'11–25', crit:'26–30'}, fx:{dmg:{hit:'2L, 1M / 1C',         crit:'3L, 2M / 1C'},        def:{hit:'Bloqueia 2L, 1M / 1C',    crit:'Bloqueia 3L, 2M / 1C'},        cure:{hit:'3L',  crit:'6L'}}},
+  5: { dice:'d40', actions:'4 ações',               ranges:{disaster:'1–10', fail:'11–20', hit:'21–35', crit:'36–40'}, fx:{dmg:{hit:'3L, 2M, 1P / 1C',     crit:'4L, 3M, 2P / 2C'},    def:{hit:'Bloqueia 3L, 2M, 1P / 1C',crit:'Bloqueia 4L, 3M, 2P / 2C'},    cure:{hit:'9L',  crit:'12L'}}},
+  6: { dice:'d40', actions:'Todas as ações (5)',     ranges:{disaster:'1–10', fail:'11–20', hit:'21–35', crit:'36–40'}, fx:{dmg:{hit:'4L, 3M, 2P / 2C',     crit:'5L, 4M, 3P / 3C'},    def:{hit:'Bloqueia 4L, 4M, 2P / 2C',crit:'Bloqueia 5L, 5M, 3P / 3C'},    cure:{hit:'15L', crit:'18L'}}},
+  7: { dice:'d50', actions:'Rodada de preparação',  ranges:{disaster:'1–20', fail:'21–35', hit:'36–45', crit:'46–50'}, fx:{dmg:{hit:'4L, 3M, 3P / 2C',     crit:'Morte Instantânea / 5L, 5M, 5P / 3C'}, def:{hit:'Bloqueia 2L, 2M, 2P / 2C', crit:'Absoluta / 5L, 5M, 5P / 3C'}, cure:{hit:'24L', crit:'27L — Cura Completa'}}},
 };
 
 // Inferência de tipo para feitiços antigos sem o campo
 function inferTipo(cat) {
-  if (cat === 'Cura') return 'Cura';
+  if (cat === 'Cura')           return 'Cura';
   if (['Maldição', 'Maldição Menor', 'Azaração'].includes(cat)) return 'Dano';
   if (cat === 'Contra-feitiço') return 'Defesa';
   return null; // ambíguo → exibe todas as linhas
@@ -65,7 +65,7 @@ export class SpellController {
 
     document.getElementById('btn-create-list')?.addEventListener('click', () => this.toggleListMode(true));
     document.getElementById('btn-cancel-list')?.addEventListener('click', () => this.toggleListMode(false));
-    document.getElementById('btn-save-list')?.addEventListener('click', () => this.exportSpellList());
+    document.getElementById('btn-save-list')?.addEventListener('click',  () => this.exportSpellList());
 
     document.getElementById('sort-order-spell')?.addEventListener('change', () => this.applyFiltersAndRender());
     document.querySelectorAll('.filter-panel input[data-filter-spell]')
@@ -79,8 +79,8 @@ export class SpellController {
   toggleListMode(active) {
     this.isListMode = active;
     this.selectedSpells.clear();
-    document.getElementById('btn-create-list').style.display = active ? 'none' : 'inline-block';
-    document.getElementById('btn-save-list').style.display = active ? 'inline-block' : 'none';
+    document.getElementById('btn-create-list').style.display = active ? 'none'         : 'inline-block';
+    document.getElementById('btn-save-list').style.display   = active ? 'inline-block' : 'none';
     document.getElementById('btn-cancel-list').style.display = active ? 'inline-block' : 'none';
     this.applyFiltersAndRender();
   }
@@ -89,11 +89,12 @@ export class SpellController {
     e.preventDefault();
     const data = {
       name: document.getElementById('s-name').value,
-      cat: document.getElementById('s-cat').value,
-      lvl: document.getElementById('s-lvl').value,
-      tipo: document.getElementById('s-tipo').value,  
+      cat:  document.getElementById('s-cat').value,
+      lvl:  document.getElementById('s-lvl').value,
+      tipo: document.getElementById('s-tipo').value,
       desc: document.getElementById('s-desc').value,
     };
+    if (data.tipo === 'N/A') delete data.tipo;
     DatabaseService.saveRecord(data, `feitico_${data.name}`);
     alert(`O manuscrito de "${data.name}" foi gerado!\nMova para 'feiticos' e adicione no indice.`);
     form.reset();
@@ -103,46 +104,46 @@ export class SpellController {
 
   initBulkImport() {
     this.bulkSpells = [];
-    document.getElementById('btn-parse-bulk')?.addEventListener('click', () => this.parseBulkJson());
+    document.getElementById('btn-parse-bulk')?.addEventListener('click',   () => this.parseBulkJson());
     document.getElementById('btn-execute-bulk')?.addEventListener('click', () => this.executeBulkImport());
-    document.getElementById('btn-cancel-bulk')?.addEventListener('click', () => this.cancelBulkImport());
+    document.getElementById('btn-cancel-bulk')?.addEventListener('click',  () => this.cancelBulkImport());
   }
 
   parseBulkJson() {
-    const input = document.getElementById('bulk-json-input').value.trim();
+    const input   = document.getElementById('bulk-json-input').value.trim();
     const errorEl = document.getElementById('bulk-error');
     const previewEl = document.getElementById('bulk-preview');
-    errorEl.style.display = 'none';
-    previewEl.style.display = 'none';
+    errorEl.style.display   = 'none';
+    previewEl.style.display  = 'none';
     document.getElementById('btn-execute-bulk').style.display = 'none';
-    document.getElementById('btn-cancel-bulk').style.display = 'none';
+    document.getElementById('btn-cancel-bulk').style.display  = 'none';
 
     let parsed;
     try {
       parsed = JSON.parse(input);
     } catch (e) {
-      errorEl.textContent = `JSON inválido: ${e.message}`;
-      errorEl.style.display = 'block';
+      errorEl.textContent    = `JSON inválido: ${e.message}`;
+      errorEl.style.display  = 'block';
       return;
     }
 
-    const raw = Array.isArray(parsed) ? parsed : [parsed];
+    const raw      = Array.isArray(parsed) ? parsed : [parsed];
     const required = ['name', 'cat', 'lvl', 'desc'];
-    const errors = [];
-    const valid = [];
+    const errors   = [];
+    const valid    = [];
 
     raw.forEach((s, i) => {
       const missing = required.filter(f => !s[f]);
       if (missing.length) {
         errors.push(`Item ${i + 1} ("${s.name || '?'}"): campos ausentes — ${missing.join(', ')}`);
       } else {
-        if (!s.tipo) s.tipo = null;
+        if (!s.tipo) s.tipo = 'Utilitário';
         valid.push(s);
       }
     });
 
     if (errors.length) {
-      errorEl.innerHTML = errors.join('<br>');
+      errorEl.innerHTML   = errors.join('<br>');
       errorEl.style.display = 'block';
     }
     if (!valid.length) return;
@@ -171,10 +172,10 @@ export class SpellController {
       });
     });
 
-    document.getElementById('bulk-count').textContent = spells.length;
-    document.getElementById('bulk-preview').style.display = 'block';
+    document.getElementById('bulk-count').textContent      = spells.length;
+    document.getElementById('bulk-preview').style.display  = 'block';
     document.getElementById('btn-execute-bulk').style.display = 'inline-block';
-    document.getElementById('btn-cancel-bulk').style.display = 'inline-block';
+    document.getElementById('btn-cancel-bulk').style.display  = 'inline-block';
   }
 
   executeBulkImport() {
@@ -195,8 +196,8 @@ export class SpellController {
 
     // Monta o indice combinando existentes + novos (sem duplicatas)
     const existingFiles = this.archive.map(s => `feitico_${safe(s.name)}.json`);
-    const newFiles = toImport.map(s => `feitico_${safe(s.name)}.json`);
-    const merged = [...new Set([...existingFiles, ...newFiles])];
+    const newFiles      = toImport.map(s => `feitico_${safe(s.name)}.json`);
+    const merged        = [...new Set([...existingFiles, ...newFiles])];
 
     setTimeout(() => {
       DatabaseService.saveRecord(merged, 'indice_feiticos');
@@ -212,11 +213,11 @@ export class SpellController {
 
   cancelBulkImport() {
     this.bulkSpells = [];
-    document.getElementById('bulk-json-input').value = '';
-    document.getElementById('bulk-preview').style.display = 'none';
-    document.getElementById('bulk-error').style.display = 'none';
+    document.getElementById('bulk-json-input').value         = '';
+    document.getElementById('bulk-preview').style.display    = 'none';
+    document.getElementById('bulk-error').style.display      = 'none';
     document.getElementById('btn-execute-bulk').style.display = 'none';
-    document.getElementById('btn-cancel-bulk').style.display = 'none';
+    document.getElementById('btn-cancel-bulk').style.display  = 'none';
   }
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -303,12 +304,12 @@ export class SpellController {
   renderDetails(s) {
     const viewer = document.getElementById('spell-viewer');
     const lvl = parseInt(s.lvl) || 1;
-    const ld = LEVEL_DATA[lvl] || LEVEL_DATA[1];
+    const ld  = LEVEL_DATA[lvl] || LEVEL_DATA[1];
     const conjAttr = CONJ_ATTR[s.cat] || 'Sabedoria';
 
     // Determina o tipo de efeito a exibir
     let tipoEfeito;
-    if (s.tipo && s.tipo !== 'Utilitário') {
+    if (s.tipo && s.tipo !== 'Utilitário' && s.tipo !== 'N/A') {
       tipoEfeito = s.tipo;             // tipo explícito no JSON
     } else if (!s.tipo) {
       tipoEfeito = inferTipo(s.cat);   // inferência por categoria (null = exibe tudo)
