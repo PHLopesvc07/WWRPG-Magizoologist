@@ -135,7 +135,10 @@ export class SpellController {
       const missing = required.filter(f => !s[f]);
       if (missing.length) {
         errors.push(`Item ${i + 1} ("${s.name || '?'}"): campos ausentes — ${missing.join(', ')}`);
-      } 
+      } else {
+        if (!s.tipo) s.tipo = null;
+        valid.push(s);
+      }
     });
 
     if (errors.length) {
