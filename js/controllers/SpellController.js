@@ -4,7 +4,7 @@ import { DatabaseService } from '../services/database.js';
 
 const CONJ_ATTR = {
   'Transfiguração': 'Transfiguração (Carisma)',
-  'Feitiço': 'Prática (Sabedoria)',
+  'Charme': 'Prática (Sabedoria)',
   'Azaração': 'DCAT (Sabedoria)',
   'Maldição Menor': 'DCAT (Sabedoria)',
   'Maldição': 'DCAT (Sabedoria)',
@@ -91,7 +91,7 @@ export class SpellController {
       name: document.getElementById('s-name').value,
       cat: document.getElementById('s-cat').value,
       lvl: document.getElementById('s-lvl').value,
-      tipo: document.getElementById('s-tipo').value,   // ← novo campo
+      tipo: document.getElementById('s-tipo').value,  
       desc: document.getElementById('s-desc').value,
     };
     DatabaseService.saveRecord(data, `feitico_${data.name}`);
@@ -135,10 +135,7 @@ export class SpellController {
       const missing = required.filter(f => !s[f]);
       if (missing.length) {
         errors.push(`Item ${i + 1} ("${s.name || '?'}"): campos ausentes — ${missing.join(', ')}`);
-      } else {
-        if (!s.tipo) s.tipo = 'Utilitário';
-        valid.push(s);
-      }
+      } 
     });
 
     if (errors.length) {
