@@ -92,6 +92,7 @@ export class SpellController {
       cat:  document.getElementById('s-cat').value,
       lvl:  document.getElementById('s-lvl').value,
       tipo: document.getElementById('s-tipo').value,
+      pronuncia: document.getElementById('s-pronunciation'),
       desc: document.getElementById('s-desc').value,
     };
     if (data.tipo === 'N/A') delete data.tipo;
@@ -162,6 +163,7 @@ export class SpellController {
         <td>${s.cat}</td>
         <td>${s.lvl}</td>
         <td>${s.tipo ?? '—'}</td>
+        <td>${s.pronuncia ?? '—'}</td>
       </tr>`).join('');
 
     tbody.querySelectorAll('.btn-remove-bulk').forEach(btn => {
@@ -335,6 +337,7 @@ export class SpellController {
           <span class="attr-badge">${s.cat}</span>
           <span class="attr-badge" style="border-color:var(--magic-gold);">Nível ${s.lvl}</span>
           <span class="attr-badge">⚅ ${ld.dice}</span>
+          <span class="attr-badge"> ${s.pronuncia}</span>
           <span class="attr-badge">ϟ ${ld.actions}</span>
           <span class="attr-badge">★ ${conjAttr}</span>
           ${s.tipo ? `<span class="attr-badge" style="border-color:#555;color:#aaa;">${s.tipo}</span>` : ''}

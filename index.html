@@ -314,6 +314,10 @@
                                 <option value="Cura">Cura</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>Ponúncia</label>
+                            <input type="text" id="s-pronunciation" class="ink-input" required>
+                        </div>
                         <div class="form-group full-width">
                             <label>Descrição do Efeito Mágico</label>
                             <textarea id="s-desc" class="ink-textarea" required></textarea>
@@ -329,7 +333,7 @@
                 <p style="font-size:0.88rem;color:#888;margin-top:0;">
                     Cole um array JSON com múltiplos feitiços. Campos obrigatórios:
                     <code>name</code>, <code>cat</code>, <code>lvl</code>, <code>desc</code>.
-                    O campo <code>tipo</code> é opcional (padrão: Utilitário).
+                    O campo <code>tipo</code> é opcional (padrão: N/A).
                 </p>
 
                 <div class="form-group" style="margin-bottom:15px;">
@@ -406,11 +410,9 @@
                                     Transfiguração</label>
                                 <label><input type="checkbox" value="Charme" data-filter-spell="cat"> Charme</label>
                                 <label><input type="checkbox" value="Azaração" data-filter-spell="cat"> Azaração</label>
-                                <label><input type="checkbox" value="Maldição Menor" data-filter-spell="cat"> Maldição
-                                    Menor</label>
+                                <label><input type="checkbox" value="Maldição Menor" data-filter-spell="cat"> Maldição Menor</label>
                                 <label><input type="checkbox" value="Maldição" data-filter-spell="cat"> Maldição</label>
-                                <label><input type="checkbox" value="Contra-feitiço" data-filter-spell="cat">
-                                    Contra-feitiço</label>
+                                <label><input type="checkbox" value="Contra-feitiço" data-filter-spell="cat"> Contra-feitiço</label>
                                 <label><input type="checkbox" value="Cura" data-filter-spell="cat"> Cura</label>
                             </details>
 
