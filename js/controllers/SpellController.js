@@ -337,7 +337,7 @@ export class SpellController {
           <span class="attr-badge">${s.cat}</span>
           <span class="attr-badge" style="border-color:var(--magic-gold);">Nível ${s.lvl}</span>
           <span class="attr-badge">⚅ ${ld.dice}</span>
-          <span class="attr-badge"> ${s.pronuncia}</span>
+          <span class="attr-badge">${s.pronuncia}</span>
           <span class="attr-badge">ϟ ${ld.actions}</span>
           <span class="attr-badge">★ ${conjAttr}</span>
           ${s.tipo ? `<span class="attr-badge" style="border-color:#555;color:#aaa;">${s.tipo}</span>` : ''}

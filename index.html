@@ -13,7 +13,6 @@
 </head>
 
 <body>
-
     <header>
         <h1>Ministério da Magia</h1>
         <p>Departamento para Regulamentação e Controle das Criaturas Mágicas</p>
@@ -27,12 +26,14 @@
     </div>
 
     <main>
+
+        <!-- ═══════════════════════════════════════════════
+             I. REGISTRAR CRIATURA
+        ═══════════════════════════════════════════════ -->
         <section id="tab-register" class="tab-content active">
             <form id="creature-form">
-
                 <div class="bureaucracy-box">
                     <h2>Dados de Identificação</h2>
-
                     <div class="form-group full-width" style="margin-bottom: 15px;">
                         <label>Fotografia da Criatura</label>
                         <div class="photo-upload-container">
@@ -43,7 +44,6 @@
                             </label>
                         </div>
                     </div>
-
                     <div class="form-grid">
                         <div class="form-group">
                             <label>Nome / Espécie</label>
@@ -57,7 +57,6 @@
                             <label>Peso Adulto (kg)</label>
                             <input type="text" id="c-weight" class="ink-input" required>
                         </div>
-
                         <div class="form-group">
                             <label>Classif. M.M.</label>
                             <select id="c-class" class="ink-select" required>
@@ -69,7 +68,6 @@
                                 <option value="XXXXX">XXXXX</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label>Licença Necessária</label>
                             <select id="c-license" class="ink-select">
@@ -79,7 +77,6 @@
                                 <option value="Não liberado">Não liberado</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label>Origem</label>
                             <select id="c-origin" class="ink-select">
@@ -87,7 +84,6 @@
                                 <option value="Artificial">Artificial</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label>Locomoção</label>
                             <select id="c-locomotion" class="ink-select">
@@ -97,7 +93,6 @@
                                 <option value="aquaéros">Aquaéros</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label>Interação</label>
                             <select id="c-interaction" class="ink-select">
@@ -105,7 +100,6 @@
                                 <option value="agressivo">Agressivo</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label>Tipo da Criatura</label>
                             <select id="c-type" class="ink-select">
@@ -115,7 +109,6 @@
                                 <option value="Bestial">Bestial</option>
                             </select>
                         </div>
-
                         <div class="form-group full-width">
                             <label>Descrição Física e Comportamental</label>
                             <textarea id="c-desc" class="ink-textarea" required></textarea>
@@ -138,7 +131,6 @@
                             <label>Vitalidade</label>
                             <input type="number" id="attr-vitalidade" class="ink-input" value="0" min="0">
                         </div>
-
                         <div class="form-group attr-dynamic" id="wrap-instinto" style="display: none;">
                             <label>Instinto</label>
                             <input type="number" id="attr-instinto" class="ink-input" value="0" min="0">
@@ -156,9 +148,6 @@
                             <input type="number" id="attr-sabedoria" class="ink-input" value="0" min="0">
                         </div>
                     </div>
-                </div>
-
-                </div>
                 </div>
 
                 <div class="bureaucracy-box">
@@ -181,25 +170,65 @@
                             /
                             <input type="number" id="c-inj-pesada-max" class="ink-input short-input" value="0" min="0">
                         </div>
-
                         <div id="custom-injuries-container"
                             style="display: flex; flex-direction: column; gap: 10px; margin-top: 5px;"></div>
                         <button type="button" id="btn-add-injury" class="btn-teal"
                             style="align-self: flex-start; font-size: 0.85rem;">+ Adicionar Condição Especial</button>
                     </div>
                 </div>
+
                 <div style="text-align: right; margin-top: 20px;">
                     <button type="submit" class="btn-gold">Carimbar e Salvar Arquivo</button>
                 </div>
             </form>
+
+            <!-- Importação em Massa de Criaturas -->
+            <div class="bureaucracy-box" style="margin-top:20px;">
+                <h2>Importação em Massa de Criaturas</h2>
+                <p style="font-size:0.88rem;color:#888;margin-top:0;">
+                    Selecione um ou mais arquivos <code>.json</code> de criaturas exportados pelo Magizoologista.
+                    O sistema irá gerar um <code>indice.json</code> atualizado com todos os registros.
+                </p>
+                <div style="display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap;align-items:center;">
+                    <label for="bulk-creature-input" class="btn-teal" style="cursor:pointer;">
+                        📂 Selecionar Arquivos (.json)
+                    </label>
+                    <input type="file" id="bulk-creature-input" accept=".json" multiple style="display:none;">
+                    <button id="btn-execute-creature-bulk" class="btn-gold" style="display:none;">
+                        Carimbar e Atualizar Índice
+                    </button>
+                    <button id="btn-cancel-creature-bulk" class="btn-danger" style="display:none;">Cancelar</button>
+                </div>
+                <div id="bulk-creature-error" style="display:none;color:#ff6b6b;font-size:0.88rem;
+                     padding:10px;border:1px solid #ff6b6b;border-radius:3px;margin-bottom:10px;"></div>
+                <div id="bulk-creature-preview" style="display:none;">
+                    <h3 style="font-size:1rem;color:var(--magic-gold);margin-top:0;">
+                        Pré-visualização — <span id="bulk-creature-count">0</span> criatura(s) detectada(s)
+                    </h3>
+                    <table class="spell-effects-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Nome</th>
+                                <th>Classificação</th>
+                                <th>Tipo</th>
+                                <th>Arquivo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bulk-creature-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
         </section>
 
+        <!-- ═══════════════════════════════════════════════
+             II. ARQUIVO DE CRIATURAS
+        ═══════════════════════════════════════════════ -->
         <section id="tab-archive" class="tab-content">
             <div class="bureaucracy-box">
                 <div class="archive-grid">
                     <div style="display: flex; flex-direction: column; gap: 15px;">
                         <h2>Índice Registrado</h2>
-
                         <div class="filter-panel bureaucracy-box" style="padding: 10px; margin: 0; box-shadow: none;">
                             <div class="form-group" style="margin-bottom: 15px;">
                                 <label>Busca</label>
@@ -208,7 +237,6 @@
                             </div>
                             <h3 style="margin-top:0; font-size: 1rem; color: var(--magic-gold);">Filtros de Pesquisa
                             </h3>
-
                             <div class="form-group" style="margin-bottom: 15px;">
                                 <label>Ordenação Alfabética</label>
                                 <select id="sort-order" class="ink-select">
@@ -216,7 +244,6 @@
                                     <option value="ZA">Z - A</option>
                                 </select>
                             </div>
-
                             <details class="filter-details">
                                 <summary>Tipo de Criatura</summary>
                                 <label><input type="checkbox" value="Simples" data-filter="tipo"> Simples</label>
@@ -224,7 +251,6 @@
                                 <label><input type="checkbox" value="Consciente" data-filter="tipo"> Consciente</label>
                                 <label><input type="checkbox" value="Bestial" data-filter="tipo"> Bestial</label>
                             </details>
-
                             <details class="filter-details">
                                 <summary>Classificação M.M.</summary>
                                 <label><input type="checkbox" value="X" data-filter="classificacao"> X</label>
@@ -233,7 +259,6 @@
                                 <label><input type="checkbox" value="XXXX" data-filter="classificacao"> XXXX</label>
                                 <label><input type="checkbox" value="XXXXX" data-filter="classificacao"> XXXXX</label>
                             </details>
-
                             <details class="filter-details">
                                 <summary>Locomoção</summary>
                                 <label><input type="checkbox" value="aéreos" data-filter="locomocao"> Aéreos</label>
@@ -243,14 +268,12 @@
                                     Aquáticos</label>
                                 <label><input type="checkbox" value="aquaéros" data-filter="locomocao"> Aquaéros</label>
                             </details>
-
                             <details class="filter-details">
                                 <summary>Origem</summary>
                                 <label><input type="checkbox" value="Natural" data-filter="origem"> Natural</label>
                                 <label><input type="checkbox" value="Artificial" data-filter="origem">
                                     Artificial</label>
                             </details>
-
                             <details class="filter-details">
                                 <summary>Interação</summary>
                                 <label><input type="checkbox" value="pacifico" data-filter="interacao"> Pacífico</label>
@@ -258,10 +281,8 @@
                                     Agressivo</label>
                             </details>
                         </div>
-
                         <ul class="creature-list" id="archive-list"></ul>
                     </div>
-
                     <div class="creature-details" id="creature-viewer">
                         <div style="text-align: center; color: var(--border-color); margin-top: 50px;">
                             Selecione uma criatura no índice para visualizar o registro completo.
@@ -271,6 +292,9 @@
             </div>
         </section>
 
+        <!-- ═══════════════════════════════════════════════
+             III. REGISTRAR FEITIÇO
+        ═══════════════════════════════════════════════ -->
         <section id="tab-register-spell" class="tab-content">
             <form id="spell-form">
                 <div class="bureaucracy-box">
@@ -315,8 +339,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Ponúncia</label>
-                            <input type="text" id="s-pronunciation" class="ink-input" required>
+                            <label>Pronúncia</label>
+                            <input type="text" id="s-pronunciation" class="ink-input">
                         </div>
                         <div class="form-group full-width">
                             <label>Descrição do Efeito Mágico</label>
@@ -328,31 +352,29 @@
                     <button type="submit" class="btn-gold">Carimbar e Salvar Feitiço</button>
                 </div>
             </form>
+
+            <!-- Importação em Massa de Feitiços -->
             <div class="bureaucracy-box" style="margin-top:20px;">
                 <h2>Importação em Massa</h2>
                 <p style="font-size:0.88rem;color:#888;margin-top:0;">
                     Cole um array JSON com múltiplos feitiços. Campos obrigatórios:
                     <code>name</code>, <code>cat</code>, <code>lvl</code>, <code>desc</code>.
-                    O campo <code>tipo</code> é opcional (padrão: N/A).
+                    Os campos <code>tipo</code> e <code>pronunciation</code> são opcionais.
                 </p>
-
                 <div class="form-group" style="margin-bottom:15px;">
                     <label>JSON de Feitiços</label>
                     <textarea id="bulk-json-input" class="ink-textarea"
                         style="min-height:140px;font-family:monospace;font-size:0.82rem;"
-                        placeholder='[&#10;  {"name":"Stupefy","cat":"Charme","lvl":"2","tipo":"Dano","desc":"Atordoa o alvo com um feixe de luz vermelha."},&#10;  {"name":"Wingardium Leviosa","cat":"Charme","lvl":"1","tipo":"Utilitário","desc":"Levita objetos."}&#10;]'></textarea>
+                        placeholder='[&#10;  {"name":"Stupefy","cat":"Charme","lvl":"2","tipo":"Dano","pronunciation":"stu-PEH-fy","desc":"Atordoa o alvo."},&#10;  {"name":"Lumos","cat":"Charme","lvl":"1","pronunciation":"LU-mos","desc":"Ilumina a ponta da varinha."}&#10;]'></textarea>
                 </div>
-
                 <div style="display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap;">
                     <button id="btn-parse-bulk" class="btn-teal">Analisar JSON</button>
                     <button id="btn-execute-bulk" class="btn-gold" style="display:none;">Carimbar e Importar
                         Todos</button>
                     <button id="btn-cancel-bulk" class="btn-danger" style="display:none;">Cancelar</button>
                 </div>
-
                 <div id="bulk-error" style="display:none;color:#ff6b6b;font-size:0.88rem;
-         padding:10px;border:1px solid #ff6b6b;border-radius:3px;margin-bottom:10px;"></div>
-
+                     padding:10px;border:1px solid #ff6b6b;border-radius:3px;margin-bottom:10px;"></div>
                 <div id="bulk-preview" style="display:none;">
                     <h3 style="font-size:1rem;color:var(--magic-gold);margin-top:0;">
                         Pré-visualização — <span id="bulk-count">0</span> feitiço(s) detectado(s)
@@ -365,7 +387,7 @@
                                 <th>Categoria</th>
                                 <th>Nível</th>
                                 <th>Tipo</th>
-                                <th>Pronuncia</th>
+                                <th>Pronúncia</th>
                             </tr>
                         </thead>
                         <tbody id="bulk-table-body"></tbody>
@@ -374,29 +396,28 @@
             </div>
         </section>
 
+        <!-- ═══════════════════════════════════════════════
+             IV. ARQUIVO DE FEITIÇOS
+        ═══════════════════════════════════════════════ -->
         <section id="tab-archive-spell" class="tab-content">
             <div class="bureaucracy-box">
                 <div class="archive-grid">
                     <div style="display: flex; flex-direction: column; gap: 15px;">
                         <h2>Índice Registrado</h2>
-
                         <div class="list-controls" style="display: flex; gap: 10px; margin-bottom: 15px;">
                             <button id="btn-create-list" class="btn-teal">Criar Lista Múltipla</button>
                             <button id="btn-save-list" class="btn-gold" style="display: none;">Salvar Lista
                                 (.json)</button>
                             <button id="btn-cancel-list" class="btn-danger" style="display: none;">Cancelar</button>
                         </div>
-
                         <div class="filter-panel bureaucracy-box" style="padding: 10px; margin: 0; box-shadow: none;">
                             <div class="form-group" style="margin-bottom: 15px;">
                                 <label>Busca</label>
                                 <input type="text" id="search-spell" class="ink-input"
                                     placeholder="Nome ou descrição...">
                             </div>
-
                             <h3 style="margin-top:0; font-size: 1rem; color: var(--magic-gold);">Filtros de Pesquisa
                             </h3>
-
                             <div class="form-group" style="margin-bottom: 15px;">
                                 <label>Ordenação Alfabética</label>
                                 <select id="sort-order-spell" class="ink-select">
@@ -404,19 +425,19 @@
                                     <option value="ZA">Z - A</option>
                                 </select>
                             </div>
-
                             <details class="filter-details">
                                 <summary>Categoria</summary>
                                 <label><input type="checkbox" value="Transfiguração" data-filter-spell="cat">
                                     Transfiguração</label>
                                 <label><input type="checkbox" value="Charme" data-filter-spell="cat"> Charme</label>
                                 <label><input type="checkbox" value="Azaração" data-filter-spell="cat"> Azaração</label>
-                                <label><input type="checkbox" value="Maldição Menor" data-filter-spell="cat"> Maldição Menor</label>
+                                <label><input type="checkbox" value="Maldição Menor" data-filter-spell="cat"> Maldição
+                                    Menor</label>
                                 <label><input type="checkbox" value="Maldição" data-filter-spell="cat"> Maldição</label>
-                                <label><input type="checkbox" value="Contra-feitiço" data-filter-spell="cat"> Contra-feitiço</label>
+                                <label><input type="checkbox" value="Contra-feitiço" data-filter-spell="cat">
+                                    Contra-feitiço</label>
                                 <label><input type="checkbox" value="Cura" data-filter-spell="cat"> Cura</label>
                             </details>
-
                             <details class="filter-details">
                                 <summary>Nível</summary>
                                 <label><input type="checkbox" value="1" data-filter-spell="lvl"> Nível 1</label>
@@ -428,10 +449,8 @@
                                 <label><input type="checkbox" value="7" data-filter-spell="lvl"> Nível 7</label>
                             </details>
                         </div>
-
                         <ul class="creature-list" id="archive-spell-list"></ul>
                     </div>
-
                     <div class="creature-details" id="spell-viewer">
                         <div style="text-align: center; color: var(--border-color); margin-top: 50px;">
                             Selecione um feitiço no índice para visualizar o registro completo.
@@ -440,7 +459,6 @@
                 </div>
             </div>
         </section>
-
 
     </main>
 </body>
